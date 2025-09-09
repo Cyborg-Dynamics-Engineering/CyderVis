@@ -1,0 +1,14 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+reloadable = true
+
+[libraries]
+linux.debug.x86_64 =     "res://../gdextension_can_io/target/debug/libgdextension_can_io.so"
+linux.release.x86_64 =   "res://../gdextension_can_io/target/release/libgdextension_can_io.so"
+windows.debug.x86_64 =   "res://../gdextension_can_io/target/debug/gdextension_can_io.dll"
+windows.release.x86_64 = "res://../gdextension_can_io/target/release/gdextension_can_io.dll"
+macos.debug =            "res://../gdextension_can_io/target/debug/libgdextension_can_io.dylib"
+macos.release =          "res://../gdextension_can_io/target/release/libgdextension_can_io.dylib"
+macos.debug.arm64 =      "res://../gdextension_can_io/target/debug/libgdextension_can_io.dylib"
+macos.release.arm64 =    "res://../gdextension_can_io/target/release/libgdextension_can_io.dylib"

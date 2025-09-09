@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlq6uk8cngr5k"]
+
+[ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="1_7v2ay"]
+
+[node name="TableButton" type="Button"]
+clip_contents = true
+custom_minimum_size = Vector2(5, 25)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = ExtResource("1_7v2ay")
+text = "Button"

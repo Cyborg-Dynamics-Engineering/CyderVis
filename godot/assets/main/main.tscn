@@ -1,0 +1,218 @@
+[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
+
+[ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
+[ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
+[ext_resource type="PackedScene" uid="uid://bhfrjyg1wbh6j" path="res://assets/tables/transmit_table/transmit_menu/transmit_menu.tscn" id="2_fwcvl"]
+[ext_resource type="Script" uid="uid://f1bhbi0m4dr1" path="res://assets/main/pause_button.gd" id="3_xwkvk"]
+[ext_resource type="Script" uid="uid://cobe8m4jq3bu7" path="res://assets/main/can_format_button.gd" id="5_0i4oc"]
+[ext_resource type="Script" uid="uid://br41fbc8o43jr" path="res://assets/main/dbc_file_button.gd" id="5_by4fb"]
+[ext_resource type="Script" uid="uid://cxmpvhrkegrfn" path="res://assets/plotting/can_graph.gd" id="5_kfbq2"]
+[ext_resource type="PackedScene" uid="uid://dj2at18bricod" path="res://assets/tables/transmit_table/transmit_table.tscn" id="6_67ri8"]
+[ext_resource type="Script" uid="uid://bo416fkw3xwje" path="res://assets/tables/transmit_table/transmit_menu_button.gd" id="9_bsumw"]
+[ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
+
+[node name="Main" type="Node"]
+
+[node name="TransmitMenu" parent="." instance=ExtResource("2_fwcvl")]
+initial_position = 1
+visible = false
+
+[node name="Background" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("2_3wy1v")
+
+[node name="Table" parent="Background" instance=ExtResource("1_ig7tw")]
+layout_mode = 1
+anchors_preset = 10
+anchor_bottom = 0.0
+offset_left = 50.0
+offset_top = 25.0
+offset_right = -50.0
+offset_bottom = 302.0
+grow_vertical = 1
+mouse_filter = 2
+
+[node name="TabContainer" type="TabContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -467.0
+grow_horizontal = 2
+grow_vertical = 0
+current_tab = 0
+
+[node name="Interface" type="Control" parent="Background/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="PauseButton" type="Button" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 272.0
+offset_top = 10.0
+offset_right = -904.0
+offset_bottom = -380.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+text = "Start"
+script = ExtResource("3_xwkvk")
+
+[node name="CanInterfaceBox" type="LineEdit" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 145.0
+offset_top = 11.0
+offset_right = -1031.0
+offset_bottom = -385.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "can0"
+
+[node name="CanInterfaceLabel" type="Label" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 18.0
+offset_right = -1139.0
+offset_bottom = -391.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "CAN Interface:"
+
+[node name="DbcFileBox" type="LineEdit" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 144.0
+offset_top = 64.0
+offset_right = -670.0
+offset_bottom = -332.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "No DBC file"
+
+[node name="DbcFileLabel" type="Label" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 66.0
+offset_top = 70.0
+offset_right = -1139.0
+offset_bottom = -339.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "DBC File:	"
+
+[node name="DbcFileButton" type="Button" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 625.0
+offset_top = 62.0
+offset_right = -551.0
+offset_bottom = -328.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+text = "Load"
+script = ExtResource("5_by4fb")
+
+[node name="CanFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 125.0
+offset_right = 135.0
+offset_bottom = 148.0
+text = "CAN ID Format:"
+
+[node name="CanFormatButton" type="Button" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 144.0
+offset_top = 115.0
+offset_right = -1003.0
+offset_bottom = -275.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+text = "Hexadecimal"
+script = ExtResource("5_0i4oc")
+
+[node name="Plot" type="Control" parent="Background/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Graph2D" type="Control" parent="Background/TabContainer/Plot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -590.0
+offset_top = -205.5
+offset_right = 590.0
+offset_bottom = 205.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_kfbq2")
+background_color = Color(0.180392, 0.180392, 0.180392, 1)
+grid_horizontal_visible = true
+grid_vertical_visible = true
+metadata/_custom_type_script = "uid://bs2ndl3vun60f"
+
+[node name="Transmit" type="Control" parent="Background/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Table" parent="Background/TabContainer/Transmit" instance=ExtResource("6_67ri8")]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 72.0
+offset_right = -18.0
+offset_bottom = -16.0
+
+[node name="TransmitAddButton" type="Button" parent="Background/TabContainer/Transmit"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1251.0
+offset_top = -421.0
+offset_right = -1130.0
+offset_bottom = -371.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+text = "Add New"
+script = ExtResource("9_bsumw")
+
+[node name="GodotCanBridge" type="GodotCanBridge" parent="."]
+
+[node name="AlertHandler" type="Node" parent="."]
+script = ExtResource("11_bsumw")

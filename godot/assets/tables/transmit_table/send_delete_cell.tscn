@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://c11pe2jttrmq3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wf3ce"]
+bg_color = Color(0.215686, 0.215686, 0.215686, 1)
+
+[node name="SendDeleteCell" type="PanelContainer"]
+offset_right = 24.0
+offset_bottom = 24.0
+metadata/_tab_index = 2
+
+[node name="SendButton" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_wf3ce")
+text = "X"

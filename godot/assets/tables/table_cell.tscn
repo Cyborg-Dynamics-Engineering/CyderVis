@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dci3k3q2mc30d"]
+
+[node name="TableCell" type="PanelContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(5, 25)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+mouse_filter = 1
+text = "Cell"
+horizontal_alignment = 1
+clip_text = true

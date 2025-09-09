@@ -1,0 +1,8 @@
+# Rust build artifacts
+target/
+
+# Godot export templates
+export_presets.cfg
+
+# DBC files inside the godot project
+godot/*.dbc
