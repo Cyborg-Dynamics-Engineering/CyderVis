@@ -3,15 +3,13 @@ mod can_parser;
 use crate::can_parser::CanParser;
 use godot::classes::{Node, ResourceLoader, Script};
 use godot::prelude::*;
-use nb;
-use socketcan::{
-    CanDataFrame, CanFrame, CanId, CanInterface, CanSocket, EmbeddedFrame, ExtendedId, Frame,
-    NonBlockingCan, Socket, StandardId,
-};
+use crosscan::can::CanFrame;
+use crosscan::CrossCanSocket;
 use std::collections::{HashMap, VecDeque};
-use std::sync::{Arc, Mutex};
-use std::thread;
-use std::time::{Duration, SystemTime};
+use std::sync::{Arc};
+use tokio::sync::{Mutex};
+use std::time::{SystemTime};
+use tokio::runtime::Runtime;
 
 struct CanGDExtension;
 
@@ -24,10 +22,11 @@ unsafe impl ExtensionLibrary for CanGDExtension {}
 #[class(base=Node)]
 struct GodotCanBridge {
     can_parser: can_parser::CanParser,
-    read_handle: Option<thread::JoinHandle<()>>,
+    read_handle: Option<tokio::task::JoinHandle<()>>,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
+    runtime: tokio::runtime::Runtime,
 
     base: Base<Node>,
 }
@@ -35,8 +34,10 @@ struct GodotCanBridge {
 struct CanEntry {
     timestamp: u128,
     freq_hz: f32,
-    frame: CanDataFrame,
+    frame: CanFrame,
 }
+
+type CanId = u32;
 
 #[godot_api]
 impl INode for GodotCanBridge {
@@ -50,6 +51,7 @@ impl INode for GodotCanBridge {
             can_entries: Arc::new(Mutex::new(HashMap::<CanId, CanEntry>::new())),
             sending_queue: Arc::new(Mutex::new(VecDeque::<CanFrame>::new())),
             closure_requested: Arc::new(Mutex::new(false)),
+            runtime: Runtime::new().unwrap(),
             base,
         }
     }
@@ -86,29 +88,6 @@ impl GodotCanBridge {
 
     #[func]
     fn configure_bus(&mut self, interface_name: String) -> bool {
-        // Open the CAN interface
-        let interface = match CanInterface::open(&interface_name) {
-            Ok(val) => val,
-            Err(e) => {
-                error_alert_godot(format!("Could not open CAN interface: {e}"));
-                return false;
-            }
-        };
-
-        // Configure CAN interface if required - bring down, set bitrate, bring up
-        let bitrate: Option<u32> = None;
-        if let Some(br) = bitrate {
-            interface.bring_down().unwrap_or_else(|e| {
-                error_alert_godot(format!("Cannnot bring down interface: {e}"));
-            });
-            interface.set_bitrate(br, None).unwrap_or_else(|e| {
-                error_alert_godot(format!("Cannnot set bitrate: {e} (If using a vcan interface, bringing down the interface to modify the bitrate will crash the bridge)"));
-            });
-            interface.bring_up().unwrap_or_else(|e| {
-                error_alert_godot(format!("Cannnot bring up interface: {e}"));
-            });
-        }
-
         // Check if multithreading is functional in this godot-rust version
         if let Err(err) = std::thread::spawn(|| {
             godot_print!("RUST threading successful");
@@ -125,20 +104,21 @@ impl GodotCanBridge {
             error_alert_godot(format!("Error when attempting to thread: {:?}", msg));
         }
 
-        // Create the CAN read thread
-        self.read_handle = Some(thread::spawn({
-            let can_entries = Arc::clone(&self.can_entries);
-            let sending_queue = Arc::clone(&self.sending_queue);
-            let closure_requested = Arc::clone(&self.closure_requested);
-            move || {
+        // Create the CAN read/write thread
+        let _guard = self.runtime.enter();
+        let can_entries = Arc::clone(&self.can_entries);
+        let sending_queue = Arc::clone(&self.sending_queue);
+        let closure_requested = Arc::clone(&self.closure_requested);
+        self.read_handle = Some(tokio::spawn(
+            async {
                 read_can(
                     interface_name,
                     can_entries,
                     sending_queue,
                     closure_requested,
-                );
+                ).await;
             }
-        }));
+        ));
 
         godot_print!("CAN bus opened");
         return true;
@@ -147,71 +127,41 @@ impl GodotCanBridge {
     #[func]
     fn get_can_table(&mut self) -> VariantArray {
         self.can_parser
-            .parse_can_table(&self.can_entries.lock().unwrap())
+            .parse_can_table(&self.runtime.block_on(self.can_entries.lock()))
     }
 
     #[func]
     fn send_standard_can(&mut self, can_id_value: u16, data: VariantArray) {
-        // Create a standard CAN ID (e.g., 0x123)
-        let can_id = match StandardId::new(can_id_value) {
-            Some(id) => id,
-            None => {
-                eprintln!("Could not resolve {can_id_value} into a Standard CAN ID");
-                return;
-            }
-        };
-
         // Convert from Godot Variant to typed u8 vector
         let packed_bytes = PackedByteArray::from(&data);
         let byte_slice_data: &[u8] = packed_bytes.as_slice();
 
         // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
-        let frame = match CanFrame::new(can_id, &byte_slice_data) {
-            Some(can_frame) => can_frame,
-            None => {
-                eprintln!("Could not parse data for message: {can_id_value}");
-                return;
-            }
-        };
+        let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
 
-        self.sending_queue.lock().unwrap().push_back(frame);
+        self.runtime.block_on(self.sending_queue.lock()).push_back(frame);
     }
 
     #[func]
     fn send_extended_can(&mut self, can_id_value: u32, data: VariantArray) {
-        // Create an extended CAN ID (e.g., 0x12345678)
-        let can_id = match ExtendedId::new(can_id_value) {
-            Some(id) => id,
-            None => {
-                eprintln!("Could not resolve {can_id_value} into an Extended CAN ID");
-                return;
-            }
-        };
-
         // Convert from Godot Variant to typed u8 vector
         let packed_bytes = PackedByteArray::from(&data);
         let byte_slice_data: &[u8] = packed_bytes.as_slice();
 
         // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
-        let frame = match CanFrame::new(can_id, &byte_slice_data) {
-            Some(can_frame) => can_frame,
-            None => {
-                eprintln!("Could not parse data for message: {can_id_value}");
-                return;
-            }
-        };
+        let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
 
-        self.sending_queue.lock().unwrap().push_back(frame);
+        self.runtime.block_on(self.sending_queue.lock()).push_back(frame);
     }
 
     #[func]
     fn close_bus(&mut self) {
         if let Some(handle) = self.read_handle.take() {
             // Flag the thread to end
-            *self.closure_requested.lock().unwrap() = true;
+            *self.runtime.block_on(self.closure_requested.lock()) = true;
 
             // Wait for thread to complete
-            handle.join().unwrap();
+            self.runtime.block_on(handle).unwrap();
 
             godot_print!("CAN bus closed");
         } else {
@@ -228,14 +178,14 @@ impl GodotCanBridge {
     }
 }
 
-fn read_can(
+async fn read_can(
     interface_name: String,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
 ) {
     // Open async CAN socket
-    let mut socket = match CanSocket::open(&interface_name) {
+    let mut socket = match CrossCanSocket::open(&interface_name) {
         Ok(sock) => sock,
         Err(err) => {
             error_alert_godot(format!("Failed to open CAN socket: {err:?}"));
@@ -243,43 +193,32 @@ fn read_can(
         }
     };
 
-    match socket.set_nonblocking(true) {
-        Ok(_) => {}
-        Err(err) => {
-            error_alert_godot(format!("Failed to configure CAN socket: {err:?}"));
-            return;
-        }
-    }
-
     loop {
         // Process outgoing CAN messages
-        match sending_queue.lock() {
-            Ok(mut frames_to_send) => {
-                for frame in frames_to_send.iter() {
-                    socket.transmit(frame).unwrap();
-                }
-                frames_to_send.clear();
+        {
+            let mut frames_to_send = sending_queue.lock().await;
+            for frame in frames_to_send.clone().into_iter() {
+                socket.write_frame(frame).await.unwrap();
             }
-            Err(err) => error_alert_godot(format!("Received Mutex poison error: {:?}", err)),
+            frames_to_send.clear();
         }
 
         // Check if the bus should be closed
-        match closure_requested.lock() {
-            Ok(mut should_close) => {
-                if *should_close {
-                    *should_close = false;
+        {
+            let mut should_close = closure_requested.lock().await;
+            if *should_close {
 
-                    // Breaks out of the loop, ending the thread
-                    break;
-                }
+                *should_close = false;
+
+                // Breaks out of the loop, ending the thread
+                break;
             }
-            Err(err) => error_alert_godot(format!("Received Mutex poison error: {:?}", err)),
         }
 
         // Process incoming CAN messages
-        let res = socket.receive();
+        let res = socket.read_frame().await;
         match res {
-            Ok(CanFrame::Data(frame)) => {
+            Ok(frame) => {
                 let current_timestamp_us = match SystemTime::UNIX_EPOCH.elapsed() {
                     Ok(system_time) => system_time.as_micros(),
                     Err(error) => {
@@ -290,8 +229,8 @@ fn read_can(
                     }
                 };
 
-                let mut can_entries = can_entries.lock().unwrap();
-                match can_entries.entry(frame.can_id()) {
+                let mut can_entries = can_entries.lock().await;
+                match can_entries.entry(frame.id()) {
                     // If we've received this CAN ID before, update the existing entry and calculate frequency
                     std::collections::hash_map::Entry::Occupied(mut occupied_entry) => {
                         let can_entry = occupied_entry.get_mut();
@@ -314,15 +253,10 @@ fn read_can(
                     }
                 }
             }
-            Err(nb::Error::WouldBlock) => {
-                thread::sleep(Duration::from_millis(50));
-            }
             Err(err) => {
                 error_alert_godot(format!("Received CAN error: {:?}", err));
                 break;
             }
-            Ok(CanFrame::Remote(frame)) => eprintln!("Remote frame: {frame:?}"),
-            Ok(CanFrame::Error(frame)) => eprintln!("Error frame: {frame:?}"),
         }
     }
 }
