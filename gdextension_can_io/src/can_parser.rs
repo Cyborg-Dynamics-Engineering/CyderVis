@@ -1,9 +1,15 @@
-use crate::CanEntry;
+///
+/// can_parser.rs
+///
+/// Parses CanFrames into Godot Variant Arrays.
+/// Can optionally utilise a CAN DBC file to parse the raw data into named items in the Godot Arrays.
+///
+use crate::{CanEntry, CanId};
 use can_dbc::{ByteOrder, DBC};
 use core::panic;
+use crosscan::can::CanFrame;
 use godot::builtin::{GString, VariantArray};
 use godot::prelude::*;
-use socketcan::{CanDataFrame, CanId, EmbeddedFrame, Frame};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
@@ -67,19 +73,24 @@ impl CanParser {
 
         godot_can_entry.push(&GString::from(format!("{:?}", can_entry.timestamp)).to_variant());
         godot_can_entry.push(&GString::from(format!("{:?}", can_entry.freq_hz)).to_variant());
-        godot_can_entry
-            .push(&GString::from(format!("{:?}", can_entry.frame.can_id().as_raw())).to_variant());
+        godot_can_entry.push(&GString::from(format!("{:?}", can_entry.frame.id())).to_variant());
 
         // Search for a message in the DBC to deserialise this CAN frame
         let mut message_id_found_in_dbc = false;
         if let Some(dbc) = &self.dbc {
             for message_info in dbc.messages() {
-                message_id_found_in_dbc =
-                    can_entry.frame.can_id().raw() == message_info.message_id().raw();
+                let mut id_with_ext_bit = can_entry.frame.id();
+                if can_entry.frame.is_extended() {
+                    id_with_ext_bit |= 1 << 31
+                }
+                message_id_found_in_dbc = id_with_ext_bit == message_info.message_id().raw();
                 if message_id_found_in_dbc {
                     godot_can_entry.push(&GString::from(message_info.message_name()).to_variant());
-                    godot_can_entry =
-                        self.deserialise_dbc_data(godot_can_entry, can_entry.frame, message_info);
+                    godot_can_entry = self.deserialise_dbc_data(
+                        godot_can_entry,
+                        can_entry.frame.clone(),
+                        message_info,
+                    );
                     break;
                 }
             }
@@ -88,7 +99,8 @@ impl CanParser {
         // If none were found, deserialise as raw bytes
         if !message_id_found_in_dbc {
             godot_can_entry.push(&GString::from("").to_variant()); // Empty msg name to indicate no definition in the DBC
-            godot_can_entry = Self::deserialise_unknown_data(godot_can_entry, can_entry.frame);
+            godot_can_entry =
+                Self::deserialise_unknown_data(godot_can_entry, can_entry.frame.clone());
         }
 
         // The last element indicates to Godot whether the frame is Extended
@@ -102,7 +114,7 @@ impl CanParser {
     fn deserialise_dbc_data(
         &self,
         mut godot_can_entry: Array<Variant>,
-        frame: CanDataFrame,
+        frame: CanFrame,
         message_info: &can_dbc::Message,
     ) -> Array<Variant> {
         for signal in message_info.signals() {
@@ -161,7 +173,7 @@ impl CanParser {
     /// Deserialises and appends the raw byte data from the CAN frame to the Godot CAN entry
     fn deserialise_unknown_data(
         mut godot_can_entry: Array<Variant>,
-        frame: CanDataFrame,
+        frame: CanFrame,
     ) -> Array<Variant> {
         for byte in frame.data() {
             godot_can_entry.push(&GString::from(format!("{:?}", byte)).to_variant())
@@ -210,19 +222,5 @@ impl CanParser {
         }
 
         value
-    }
-}
-
-pub trait CanIdExt {
-    fn raw(self) -> u32;
-}
-
-impl CanIdExt for CanId {
-    /// Raw value of the CAN ID, including an additional bitflag for extended identifiers
-    fn raw(self) -> u32 {
-        match self {
-            CanId::Standard(id) => id.as_raw() as u32,
-            CanId::Extended(id) => id.as_raw() | 1 << 31,
-        }
     }
 }
