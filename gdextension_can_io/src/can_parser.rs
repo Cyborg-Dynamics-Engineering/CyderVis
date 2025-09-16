@@ -1,3 +1,9 @@
+///
+/// can_parser.rs
+///
+/// Parses CanFrames into Godot Variant Arrays.
+/// Can optionally utilise a CAN DBC file to parse the raw data into named items in the Godot Arrays.
+///
 use crate::{CanEntry, CanId};
 use can_dbc::{ByteOrder, DBC};
 use core::panic;

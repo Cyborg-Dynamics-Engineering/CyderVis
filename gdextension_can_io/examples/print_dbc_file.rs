@@ -20,8 +20,10 @@ fn main() -> io::Result<()> {
         println!("Size: {:?}", message.message_size());
         println!("Transmitter: {:?}", message.transmitter());
         for signal in message.signals() {
+            let ext_type = dbc.extended_value_type_for_signal(*message.message_id(), signal.name());
+
             println!("  {:?}", signal);
-            println!("      Type: {:?}", dbc.extended_value_type_for_signal(*message.message_id(), signal.name()));
+            println!("      Type: {:?}", ext_type);
         }
     }
 

@@ -1,15 +1,15 @@
 mod can_parser;
 
 use crate::can_parser::CanParser;
+use crosscan::CrossCanSocket;
+use crosscan::can::CanFrame;
 use godot::classes::{Node, ResourceLoader, Script};
 use godot::prelude::*;
-use crosscan::can::CanFrame;
-use crosscan::CrossCanSocket;
 use std::collections::{HashMap, VecDeque};
-use std::sync::{Arc};
-use tokio::sync::{Mutex};
-use std::time::{SystemTime};
+use std::sync::Arc;
+use std::time::SystemTime;
 use tokio::runtime::Runtime;
+use tokio::sync::Mutex;
 
 struct CanGDExtension;
 
@@ -109,16 +109,15 @@ impl GodotCanBridge {
         let can_entries = Arc::clone(&self.can_entries);
         let sending_queue = Arc::clone(&self.sending_queue);
         let closure_requested = Arc::clone(&self.closure_requested);
-        self.read_handle = Some(tokio::spawn(
-            async {
-                read_can(
-                    interface_name,
-                    can_entries,
-                    sending_queue,
-                    closure_requested,
-                ).await;
-            }
-        ));
+        self.read_handle = Some(tokio::spawn(async {
+            read_can(
+                interface_name,
+                can_entries,
+                sending_queue,
+                closure_requested,
+            )
+            .await;
+        }));
 
         godot_print!("CAN bus opened");
         return true;
@@ -139,7 +138,9 @@ impl GodotCanBridge {
         // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
         let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
 
-        self.runtime.block_on(self.sending_queue.lock()).push_back(frame);
+        self.runtime
+            .block_on(self.sending_queue.lock())
+            .push_back(frame);
     }
 
     #[func]
@@ -151,7 +152,9 @@ impl GodotCanBridge {
         // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
         let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
 
-        self.runtime.block_on(self.sending_queue.lock()).push_back(frame);
+        self.runtime
+            .block_on(self.sending_queue.lock())
+            .push_back(frame);
     }
 
     #[func]
@@ -207,7 +210,6 @@ async fn read_can(
         {
             let mut should_close = closure_requested.lock().await;
             if *should_close {
-
                 *should_close = false;
 
                 // Breaks out of the loop, ending the thread
