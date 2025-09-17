@@ -1,7 +1,7 @@
 mod can_parser;
 
 use crate::can_parser::CanParser;
-use crosscan::CrossCanSocket;
+use crosscan::CanInterface;
 use crosscan::can::CanFrame;
 use godot::classes::{Node, ResourceLoader, Script};
 use godot::prelude::*;
@@ -187,8 +187,15 @@ async fn read_can(
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
 ) {
+    // Select a specific CAN Socket implementation for the supported operating systems
+    #[cfg(target_os = "linux")]
+    use crosscan::lin_can::LinuxCan as CanSocket;
+
+    #[cfg(target_os = "windows")]
+    use crosscan::win_can::WindowsCan as CanSocket;
+
     // Open async CAN socket
-    let mut socket = match CrossCanSocket::open(&interface_name) {
+    let mut socket = match CanSocket::open(&interface_name) {
         Ok(sock) => sock,
         Err(err) => {
             error_alert_godot(format!("Failed to open CAN socket: {err:?}"));
