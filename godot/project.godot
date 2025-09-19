@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Cyder Stream"
+config/name="Cyder Vis"
 run/main_scene="uid://dno8ya28n0fu0"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="uid://cxm8emaglono1"
