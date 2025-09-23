@@ -22,6 +22,7 @@ After installing win-can-utils, start a can server by running
 canserver <COM Port> -b <CAN Bitrate>
 ```
 Run CyderVis and type in the name of the CAN interface (ie. COM12) into the CAN Interface input box and click 'Start'.
+If the CAN adapter has been configured correctly, and is receiving data, it will appear in the table at the top of the window.
 
 ### Linux
 
@@ -32,6 +33,7 @@ sudo apt install can-utils
 sudo ip link set can0 up type can bitrate 1000000
 ```
 Run CyderVis and type in the name of the CAN interface (ie. can0) into the CAN Interface input box and click 'Start'.
+If the CAN adapter has been configured correctly, and is receiving data, it will appear in the table at the top of the window.
 
 ## License
 
