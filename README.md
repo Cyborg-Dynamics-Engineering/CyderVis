@@ -6,11 +6,46 @@ A GUI application for realtime viewing, deserialising, and plotting CAN data. Su
     <img src="godot/screenshot.png" width="50%">
 </p>
 
-## Project Structure
+## Installation
+
+Go to the [Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page and download the latest program from the **Assets** dropdown.
+
+## Usage - Windows
+
+Windows users must install [win-can-utils](https://github.com/Cyborg-Dynamics-Engineering/win-can-utils).
+
+After installing win-can-utils, start a can server by running
+
+```bash
+canserver <COM Port> -b <CAN Bitrate>
+```
+Run CyderVis and type in the name of the CAN interface (ie. COM12) into the CAN Interface input box and click 'Start'.
+
+## Usage - Linux
+
+Linux users must install can-utils & bring up a can interface.
+
+```bash
+sudo apt install can-utils
+sudo ip link set can0 up type can bitrate 1000000
+```
+Run CyderVis and type in the name of the CAN interface (ie. can0) into the CAN Interface input box and click 'Start'.
+
+## License
+
+Cyder Vis is licensed under either of
+
+    Apache License, Version 2.0 (LICENSE-APACHE or http://www.apache.org/licenses/LICENSE-2.0)
+    MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
+
+
+## Developers
+
+### Project Structure
 
 The visualiser tool is Godot based, with the Godot project located in the `godot/` directory. The `gdextension_can_io/` directory contains a rust-based GDExtension that provides a CAN interface node to Godot projects. The extension supports deserialisation of known CAN messages through the [CAN DBC](https://www.csselectronics.com/pages/can-dbc-file-database-intro) file format.
 
-## Setup
+### Setup
 
 - Ensure the all repo files are updated,
 
@@ -29,15 +64,8 @@ cargo build
 - Download the latest [Godot Editor](https://godotengine.org/)
 - Open the project in the Godot editor. The project file can be found under `godot/project.godot`. Press `F5` or click the play button on the top right to run the project.
 
-## License
-
-Cyder Vis is licensed under either of
-
-    Apache License, Version 2.0 (LICENSE-APACHE or http://www.apache.org/licenses/LICENSE-2.0)
-    MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT)
-
 at your option.
 
-## Contribution
+### Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
