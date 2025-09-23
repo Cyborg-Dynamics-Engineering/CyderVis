@@ -10,7 +10,9 @@ A GUI application for realtime viewing, deserialising, and plotting CAN data. Su
 
 Go to the [Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page and download the latest program from the **Assets** dropdown.
 
-## Usage - Windows
+## Usage
+
+### Windows
 
 Windows users must install [win-can-utils](https://github.com/Cyborg-Dynamics-Engineering/win-can-utils).
 
@@ -21,7 +23,7 @@ canserver <COM Port> -b <CAN Bitrate>
 ```
 Run CyderVis and type in the name of the CAN interface (ie. COM12) into the CAN Interface input box and click 'Start'.
 
-## Usage - Linux
+### Linux
 
 Linux users must install can-utils & bring up a can interface.
 
