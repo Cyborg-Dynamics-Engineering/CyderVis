@@ -8,11 +8,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_v5i0k")
 
 [node name="Rows" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 size = Vector2i(100, 35)

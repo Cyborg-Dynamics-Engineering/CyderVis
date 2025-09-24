@@ -38,7 +38,7 @@ func _process(_delta: float) -> void:
 		render(godot_can_bridge.get_can_table())
 
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
 		var last_mouse_pos = get_global_mouse_position()
 		right_click_context_menu.popup(Rect2(last_mouse_pos.x, last_mouse_pos.y, right_click_context_menu.size.x, right_click_context_menu.size.y))
