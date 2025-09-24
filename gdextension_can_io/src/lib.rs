@@ -130,6 +130,11 @@ impl GodotCanBridge {
     }
 
     #[func]
+    fn clear_can_table(&mut self) {
+        self.runtime.block_on(self.can_entries.lock()).clear();
+    }
+
+    #[func]
     fn send_standard_can(&mut self, can_id_value: u16, data: VariantArray) {
         // Convert from Godot Variant to typed u8 vector
         let packed_bytes = PackedByteArray::from(&data);

@@ -73,10 +73,13 @@ func render(data: Array) -> void:
 
 # Clears all rows from the table
 func clear() -> void:
+	# Clear rows and entries from Godot side
 	for entry: ReceiveTableEntry in existing_can_entries.values():
 		entry.get_row().queue_free()
-	
 	existing_can_entries.clear()
+
+	# Clear entries from rust side
+	godot_can_bridge.clear_can_table()
 
 
 # Re-renders every CAN entry. Useful for updating the table on formatting state changes.
