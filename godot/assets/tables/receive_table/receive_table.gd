@@ -6,6 +6,7 @@ class_name ReceiveTable
 @onready var table_cell = preload("res://assets/tables/table_cell.tscn")
 @onready var table_button = preload("res://assets/tables/table_button.tscn")
 @onready var rows: Control = get_node("Rows")
+@onready var right_click_context_menu: PopupMenu = get_node("PopupMenu")
 @onready var godot_can_bridge: GodotCanBridge = get_tree().current_scene.get_node("GodotCanBridge")
 @onready var pause_button: PauseButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/PauseButton")
 @onready var can_graph: CanGraph = get_tree().current_scene.get_node("Background/TabContainer/Plot/Graph2D")
@@ -28,10 +29,19 @@ const HEADER_LABELS = ["TIMESTAMP", "FREQ [Hz]", "CAN ID", "MSG NAME", "DATA"]
 func _ready() -> void:
 	_generate_header_row()
 
+	# Attach the 'Clear' element in the context menu at index 0 to the clear table method
+	right_click_context_menu.index_pressed.connect(func(index): if index == 0: self.clear())
+
 
 func _process(_delta: float) -> void:
 	if not pause_button.is_paused():
 		render(godot_can_bridge.get_can_table())
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
+		var last_mouse_pos = get_global_mouse_position()
+		right_click_context_menu.popup(Rect2(last_mouse_pos.x, last_mouse_pos.y, right_click_context_menu.size.x, right_click_context_menu.size.y))
 
 
 # Updates the rows in the table with incoming data

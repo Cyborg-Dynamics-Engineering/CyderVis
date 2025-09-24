@@ -13,3 +13,10 @@ script = ExtResource("1_v5i0k")
 [node name="Rows" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+size = Vector2i(100, 35)
+mouse_passthrough = true
+item_count = 1
+item_0/text = "Clear"
+item_0/id = 0
