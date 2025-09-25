@@ -252,10 +252,16 @@ async fn read_can(
                     std::collections::hash_map::Entry::Occupied(mut occupied_entry) => {
                         let can_entry = occupied_entry.get_mut();
 
+                        // Calculate the frequency between the previous two messages
                         let last_timestamp_us = can_entry.timestamp;
-                        can_entry.freq_hz =
-                            1e6 / ((current_timestamp_us - last_timestamp_us) as f32);
+                        let new_freq_hz = 1e6 / ((current_timestamp_us - last_timestamp_us) as f32);
                         can_entry.timestamp = current_timestamp_us;
+
+                        // Apply exponential filter to existing frequency
+                        const ALPHA: f32 = 0.9;
+                        can_entry.freq_hz =
+                            (ALPHA * new_freq_hz) + (1.0 - ALPHA) * can_entry.freq_hz;
+
                         can_entry.frame = frame;
                     }
 
