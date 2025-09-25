@@ -7,7 +7,7 @@ use godot::classes::{Node, ResourceLoader, Script};
 use godot::prelude::*;
 use std::collections::{HashMap, VecDeque};
 use std::sync::Arc;
-use std::time::SystemTime;
+use std::time::{Duration, SystemTime};
 use tokio::runtime::Runtime;
 use tokio::sync::Mutex;
 
@@ -226,8 +226,14 @@ async fn read_can(
             }
         }
 
-        // Process incoming CAN messages
-        let res = socket.read_frame().await;
+        // Read a CanFrame. If none found within timeout, continue the loop (rechecks for outgoing or closing requests then try again)
+        let res = match tokio::time::timeout(Duration::from_millis(100), socket.read_frame()).await
+        {
+            Ok(res) => res,
+            Err(_) => continue,
+        };
+
+        // Process the incoming CanFrame
         match res {
             Ok(frame) => {
                 let current_timestamp_us = match SystemTime::UNIX_EPOCH.elapsed() {
