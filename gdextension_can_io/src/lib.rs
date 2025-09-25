@@ -155,7 +155,7 @@ impl GodotCanBridge {
         let byte_slice_data: &[u8] = packed_bytes.as_slice();
 
         // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
-        let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
+        let frame = CanFrame::new_eff(can_id_value as u32, &byte_slice_data).unwrap();
 
         self.runtime
             .block_on(self.sending_queue.lock())
