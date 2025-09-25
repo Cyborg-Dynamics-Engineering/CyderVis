@@ -6,6 +6,7 @@ class_name ReceiveTable
 @onready var table_cell = preload("res://assets/tables/table_cell.tscn")
 @onready var table_button = preload("res://assets/tables/table_button.tscn")
 @onready var rows: Control = get_node("Rows")
+@onready var right_click_context_menu: PopupMenu = get_node("PopupMenu")
 @onready var godot_can_bridge: GodotCanBridge = get_tree().current_scene.get_node("GodotCanBridge")
 @onready var pause_button: PauseButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/PauseButton")
 @onready var can_graph: CanGraph = get_tree().current_scene.get_node("Background/TabContainer/Plot/Graph2D")
@@ -32,6 +33,39 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not pause_button.is_paused():
 		render(godot_can_bridge.get_can_table())
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Produce a 'clearing' context menu whenever right clicks fall on the receive table
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
+		var last_mouse_pos = get_global_mouse_position()
+
+		# Reconfigure context menu options
+		right_click_context_menu.clear()
+
+		# Check if the mouse is over any specific row entries and if so add the 'clear msg' item
+		var selected_can_id: int
+		for entry: ReceiveTableEntry in existing_can_entries.values():
+			var control_rect: Rect2 = entry.get_row().get_global_rect()
+			if control_rect.has_point(last_mouse_pos):
+				right_click_context_menu.add_item("Clear: " + entry.formatted_can_id())
+				selected_can_id = entry.id()
+				continue
+		
+		# Add 'clear all' item
+		right_click_context_menu.add_item("Clear all")
+
+		# Attach the 'Clear' functions to the clearing items
+		right_click_context_menu.index_pressed.connect(
+			func(menu_item_index):
+				var clear_all_selected: bool = (menu_item_index == right_click_context_menu.item_count - 1)
+				if clear_all_selected:
+					clear_all()
+				else:
+					clear_row(selected_can_id)
+		, CONNECT_ONE_SHOT)
+
+		right_click_context_menu.popup(Rect2(last_mouse_pos.x, last_mouse_pos.y, right_click_context_menu.size.x, right_click_context_menu.size.y))
 
 
 # Updates the rows in the table with incoming data
@@ -62,11 +96,24 @@ func render(data: Array) -> void:
 
 
 # Clears all rows from the table
-func clear() -> void:
+func clear_all() -> void:
+	# Clear rows and entries from Godot side
 	for entry: ReceiveTableEntry in existing_can_entries.values():
 		entry.get_row().queue_free()
-	
 	existing_can_entries.clear()
+
+	# Clear entries from rust side
+	godot_can_bridge.clear_can_table()
+
+
+# Clears a specific row from the table
+func clear_row(can_id: int) -> void:
+	# Clear rows and entries from Godot side
+	existing_can_entries[can_id].get_row().queue_free()
+	existing_can_entries.erase(can_id)
+
+	# Clear entry from rust side
+	godot_can_bridge.clear_can_entry(can_id)
 
 
 # Re-renders every CAN entry. Useful for updating the table on formatting state changes.
@@ -218,6 +265,10 @@ class ReceiveTableEntry:
 			update_labels()
 
 
+	func id() -> int:
+		return _can_id
+
+
 	func is_deserialised() -> bool:
 		return not _msg_name.is_empty()
 
@@ -235,7 +286,7 @@ class ReceiveTableEntry:
 
 		ReceiveTable._update_label_and_font_size(entry_row_cells[TIMESTAMP_IDX].get_node("Label"), "%.3f" % _last_receive_time_ms, CELL_WIDTHS[TIMESTAMP_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[FREQUENCY_IDX].get_node("Label"), "%.2f" % _frequency_hz, CELL_WIDTHS[FREQUENCY_IDX])
-		ReceiveTable._update_label_and_font_size(entry_row_cells[CAN_ID_IDX].get_node("Label"), _format_can_id(_can_id), CELL_WIDTHS[CAN_ID_IDX])
+		ReceiveTable._update_label_and_font_size(entry_row_cells[CAN_ID_IDX].get_node("Label"), formatted_can_id(), CELL_WIDTHS[CAN_ID_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[MSG_NAME_IDX].get_node("Label"), _msg_name, CELL_WIDTHS[MSG_NAME_IDX])
 
 		for i in range(len(_data)):
@@ -256,17 +307,17 @@ class ReceiveTableEntry:
 				ReceiveTable._update_label_and_font_size(entry_row_cells[DATA_START_IDX + i].get_node("Label"), _format_can_data_byte(int(_data[i])), CELL_WIDTHS[DATA_START_IDX])
 
 
-	func _format_can_id(can_id: int) -> String:
+	func formatted_can_id() -> String:
 		# Assumes 31 bit length
 		if _receive_table.can_format_button.use_hex():
-			return "0x" + ("%08x" % can_id).to_upper() if is_ext_can() else "0x" + ("%03x" % can_id).to_upper()
+			return "0x" + ("%08x" % _can_id).to_upper() if is_ext_can() else "0x" + ("%03x" % _can_id).to_upper()
 		else:
-			return "0d" + ("%09d" % can_id) if is_ext_can() else "0d" + ("%04d" % can_id)
+			return "0d" + ("%09d" % _can_id) if is_ext_can() else "0d" + ("%04d" % _can_id)
 
 
-	func _format_can_data_byte(can_id: int) -> String:
+	func _format_can_data_byte(byte: int) -> String:
 		# Assumes 8 bit length
 		if _receive_table.can_format_button.use_hex():
-			return "0x" + ("%02x" % can_id).to_upper()
+			return "0x" + ("%02x" % byte).to_upper()
 		else:
-			return "0d" + ("%03d" % can_id)
+			return "0d" + ("%03d" % byte)

@@ -130,27 +130,29 @@ impl GodotCanBridge {
     }
 
     #[func]
-    fn send_standard_can(&mut self, can_id_value: u16, data: VariantArray) {
-        // Convert from Godot Variant to typed u8 vector
-        let packed_bytes = PackedByteArray::from(&data);
-        let byte_slice_data: &[u8] = packed_bytes.as_slice();
-
-        // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
-        let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
-
-        self.runtime
-            .block_on(self.sending_queue.lock())
-            .push_back(frame);
+    fn clear_can_table(&mut self) {
+        self.runtime.block_on(self.can_entries.lock()).clear();
     }
 
     #[func]
-    fn send_extended_can(&mut self, can_id_value: u32, data: VariantArray) {
+    fn clear_can_entry(&mut self, can_id_value: u32) {
+        self.runtime
+            .block_on(self.can_entries.lock())
+            .remove_entry(&can_id_value);
+    }
+
+    #[func]
+    fn send_can_frame(&mut self, can_id_value: u32, is_extended: bool, data: VariantArray) {
         // Convert from Godot Variant to typed u8 vector
         let packed_bytes = PackedByteArray::from(&data);
         let byte_slice_data: &[u8] = packed_bytes.as_slice();
 
         // Create a CAN data frame with the ID and some data (up to 8 bytes for a standard CAN frame)
-        let frame = CanFrame::new(can_id_value as u32, &byte_slice_data).unwrap();
+        let frame = if is_extended {
+            CanFrame::new_eff(can_id_value, &byte_slice_data).unwrap()
+        } else {
+            CanFrame::new(can_id_value, &byte_slice_data).unwrap()
+        };
 
         self.runtime
             .block_on(self.sending_queue.lock())

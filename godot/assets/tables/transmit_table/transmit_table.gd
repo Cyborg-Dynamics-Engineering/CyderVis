@@ -212,11 +212,7 @@ class TransmitTableEntry:
 	func send_if_ready() -> void:
 		var current_time_ms := Time.get_ticks_msec()
 		if (current_time_ms - _last_send_time_ms) > _cycle_time_ms:
-			if is_ext_can():
-				_godot_can_bridge.send_extended_can(_can_id, _data)
-			else:
-				_godot_can_bridge.send_standard_can(_can_id, _data)
-			
+			_godot_can_bridge.send_can_frame(_can_id, is_ext_can(), _data)
 			_last_send_time_ms = current_time_ms
 		
 		# A cycle time of 0ms should be treated as 'one shot', so disable itself after sending the message
