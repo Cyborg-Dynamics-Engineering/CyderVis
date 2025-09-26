@@ -276,7 +276,11 @@ async fn read_can(
                             freq_hz = 1e6 / (delta_us as f32);
                         }
 
-                        can_entry.freq_hz = freq_hz;
+                        // -------- Exponential moving average filter --------
+                        let alpha = (delta_us as f32 / 1e6).clamp(0.003, 1.0);
+                        can_entry.freq_hz = alpha * freq_hz + (1.0 - alpha) * can_entry.freq_hz;
+
+                        // Update
                         can_entry.last_timestamp = current_timestamp_us;
                         can_entry.frame = frame;
                     }
