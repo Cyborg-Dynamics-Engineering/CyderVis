@@ -5,7 +5,9 @@ use crosscan::CanInterface;
 use crosscan::can::CanFrame;
 use godot::classes::{Node, ResourceLoader, Script};
 use godot::prelude::*;
-use std::collections::{HashMap, VecDeque};
+use std::collections::HashMap;
+use std::collections::VecDeque;
+use std::collections::hash_map::Entry;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::runtime::Runtime;
@@ -33,7 +35,8 @@ struct GodotCanBridge {
 }
 
 struct CanEntry {
-    timestamp: u128,
+    timestamps: VecDeque<u128>,
+    last_timestamp: u128,
     freq_hz: f32,
     frame: CanFrame,
 }
@@ -245,30 +248,48 @@ async fn read_can(
 
                 let mut can_entries = can_entries.lock().await;
                 match can_entries.entry(frame.id()) {
-                    // If we've received this CAN ID before, update the existing entry and calculate frequency
-                    std::collections::hash_map::Entry::Occupied(mut occupied_entry) => {
+                    Entry::Occupied(mut occupied_entry) => {
                         let can_entry = occupied_entry.get_mut();
 
-                        // Calculate the frequency between the previous two messages
-                        let last_timestamp_us = can_entry.timestamp;
-                        let new_freq_hz = 1e6 / ((current_timestamp_us - last_timestamp_us) as f32);
-                        can_entry.timestamp = current_timestamp_us;
+                        // push new timestamp
+                        can_entry.timestamps.push_back(current_timestamp_us);
 
-                        // Apply exponential filter to existing frequency
-                        const ALPHA: f32 = 0.9;
-                        can_entry.freq_hz =
-                            (ALPHA * new_freq_hz) + (1.0 - ALPHA) * can_entry.freq_hz;
+                        // drop old (>100ms)
+                        while let Some(&front) = can_entry.timestamps.front() {
+                            if current_timestamp_us - front > 100_000 {
+                                can_entry.timestamps.pop_front();
+                            } else {
+                                break;
+                            }
+                        }
 
+                        // default: window count if dense
+                        let mut freq_hz = if can_entry.timestamps.len() > 1 {
+                            (can_entry.timestamps.len() as f32) * 10.0
+                        } else {
+                            can_entry.freq_hz
+                        };
+
+                        // always use direct delta if >50ms gap
+                        let delta_us = current_timestamp_us - can_entry.last_timestamp;
+                        if delta_us > 50_000 {
+                            freq_hz = 1e6 / (delta_us as f32);
+                        }
+
+                        can_entry.freq_hz = freq_hz;
+                        can_entry.last_timestamp = current_timestamp_us;
                         can_entry.frame = frame;
                     }
 
-                    // If this is a new CAN ID
-                    std::collections::hash_map::Entry::Vacant(entry) => {
-                        // Use frequency of 0.0 (Unable to calculate frequency)
+                    Entry::Vacant(entry) => {
+                        let mut timestamps = VecDeque::new();
+                        timestamps.push_back(current_timestamp_us);
+
                         entry.insert(CanEntry {
-                            timestamp: current_timestamp_us,
+                            timestamps,
+                            last_timestamp: current_timestamp_us,
                             freq_hz: 0.0,
-                            frame: frame,
+                            frame,
                         });
                     }
                 }
