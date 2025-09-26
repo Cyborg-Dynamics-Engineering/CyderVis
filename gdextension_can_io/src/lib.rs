@@ -7,7 +7,7 @@ use godot::classes::{Node, ResourceLoader, Script};
 use godot::prelude::*;
 use std::collections::{HashMap, VecDeque};
 use std::sync::Arc;
-use std::time::{Duration, SystemTime};
+use std::time::{Duration, Instant};
 use tokio::runtime::Runtime;
 use tokio::sync::Mutex;
 
@@ -27,6 +27,7 @@ struct GodotCanBridge {
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
     runtime: tokio::runtime::Runtime,
+    start_time: Arc<Mutex<Instant>>,
 
     base: Base<Node>,
 }
@@ -52,6 +53,7 @@ impl INode for GodotCanBridge {
             sending_queue: Arc::new(Mutex::new(VecDeque::<CanFrame>::new())),
             closure_requested: Arc::new(Mutex::new(false)),
             runtime: Runtime::new().unwrap(),
+            start_time: Arc::new(Mutex::new(Instant::now())),
             base,
         }
     }
@@ -109,12 +111,14 @@ impl GodotCanBridge {
         let can_entries = Arc::clone(&self.can_entries);
         let sending_queue = Arc::clone(&self.sending_queue);
         let closure_requested = Arc::clone(&self.closure_requested);
+        let start_time = Arc::clone(&self.start_time);
         self.read_handle = Some(tokio::spawn(async {
             read_can(
                 interface_name,
                 can_entries,
                 sending_queue,
                 closure_requested,
+                start_time,
             )
             .await;
         }));
@@ -188,6 +192,7 @@ async fn read_can(
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
+    start_time: Arc<Mutex<Instant>>,
 ) {
     // Select a specific CAN Socket implementation for the supported operating systems
     #[cfg(target_os = "linux")]
@@ -236,15 +241,7 @@ async fn read_can(
         // Process the incoming CanFrame
         match res {
             Ok(frame) => {
-                let current_timestamp_us = match SystemTime::UNIX_EPOCH.elapsed() {
-                    Ok(system_time) => system_time.as_micros(),
-                    Err(error) => {
-                        error_alert_godot(format!(
-                            "A system time error occured during CAN frame decoding: {error}"
-                        ));
-                        return;
-                    }
-                };
+                let current_timestamp_us = { start_time.lock().await.elapsed().as_micros() };
 
                 let mut can_entries = can_entries.lock().await;
                 match can_entries.entry(frame.id()) {
