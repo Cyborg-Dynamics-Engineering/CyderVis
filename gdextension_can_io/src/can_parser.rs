@@ -71,7 +71,8 @@ impl CanParser {
     fn parse_can_entry(&self, can_entry: &CanEntry) -> Array<Variant> {
         let mut godot_can_entry = VariantArray::new();
 
-        godot_can_entry.push(&GString::from(format!("{:?}", can_entry.timestamp)).to_variant());
+        godot_can_entry
+            .push(&GString::from(format!("{:?}", can_entry.timestamps.back())).to_variant());
         godot_can_entry.push(&GString::from(format!("{:?}", can_entry.freq_hz)).to_variant());
         godot_can_entry.push(&GString::from(format!("{:?}", can_entry.frame.id())).to_variant());
 
