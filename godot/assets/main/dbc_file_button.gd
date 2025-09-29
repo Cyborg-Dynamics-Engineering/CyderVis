@@ -18,6 +18,5 @@ func _button_pressed() -> void:
 	if not dbc_success:
 		return
 
-
 	_pause_button.close_connection()
-	_receive_table.clear()
+	_receive_table.clear_all()
