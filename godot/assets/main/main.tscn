@@ -185,9 +185,9 @@ metadata/_tab_index = 2
 [node name="Table" parent="Background/TabContainer/Transmit" instance=ExtResource("6_67ri8")]
 layout_mode = 1
 offset_left = 10.0
-offset_top = 72.0
+offset_top = 10.0
 offset_right = -18.0
-offset_bottom = -16.0
+offset_bottom = -78.0
 
 [node name="TransmitAddButton" type="Button" parent="Background/TabContainer/Transmit"]
 layout_mode = 1
@@ -196,10 +196,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1251.0
-offset_top = -421.0
-offset_right = -1130.0
-offset_bottom = -371.0
+offset_left = -1256.0
+offset_top = -67.0
+offset_right = -1135.0
+offset_bottom = -17.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
