@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwn3h37m8jcr5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uri0s"]
+bg_color = Color(0.215686, 0.215686, 0.215686, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxyd2"]
+bg_color = Color(0.215686, 0.215686, 0.215686, 1)
+
+[node name="SendTextCell" type="PanelContainer"]
+offset_right = 24.0
+offset_bottom = 24.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uri0s")
+metadata/_tab_index = 2
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_hxyd2")
+text = "Cell"
