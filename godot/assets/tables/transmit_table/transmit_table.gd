@@ -187,7 +187,6 @@ class TransmitTableEntry:
 		var cycle_time = cycle_time_ms()
 		var current_time_ms := Time.get_ticks_msec()
 		if (current_time_ms - _last_send_time_ms) > cycle_time:
-			print(data())
 			_godot_can_bridge.send_can_frame(can_id(), is_ext_can(), data())
 			_last_send_time_ms = current_time_ms
 		
