@@ -21,7 +21,7 @@ const CAN_ID_IDX = 3
 const DATA_IDX = 4
 
 const CELL_HEIGHT = 25
-const CELL_WIDTHS = [25, 25, 120, 100, 60]
+const CELL_WIDTHS = [60, 60, 120, 100, 250]
 
 
 func _ready() -> void:
@@ -42,7 +42,7 @@ func add_new_send_entry() -> void:
 
 # Adds the header row to the table, should only be called once
 func _generate_header_row() -> void:
-	var header = ["", "", "Cycle Time [ms]", "CAN ID", "Data"]
+	var header = ["Delete", "Send", "Cycle Time [ms]", "CAN ID [hex]", "Data [hex]"]
 	var header_row: BoxContainer = table_row.instantiate()
 
 	for i in range(len(header)):
@@ -149,8 +149,10 @@ class TransmitTableEntry:
 		# Add Data box
 		var data_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
 		data_cell.custom_minimum_size = Vector2(CELL_WIDTHS[DATA_IDX], CELL_HEIGHT)
+		data_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_data_box = data_cell.get_node("LineEdit")
-		_transmit_table._update_label_and_font_size(_data_box, "", 250)
+		_data_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_transmit_table._update_label_and_font_size(_data_box, "", CELL_WIDTHS[DATA_IDX])
 		_row.add_child(data_cell)
 
 
