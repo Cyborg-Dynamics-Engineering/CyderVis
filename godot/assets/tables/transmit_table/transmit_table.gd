@@ -8,7 +8,6 @@ class_name TransmitTable
 @onready var table_send_text_cell = preload("res://assets/tables/transmit_table/send_text_cell.tscn")
 @onready var table_send_check_box = preload("res://assets/tables/transmit_table/send_checkbox_cell.tscn")
 @onready var table_send_delete_button = preload("res://assets/tables/transmit_table/send_delete_cell.tscn")
-@onready var can_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/CanFormatButton")
 @onready var send_entries: Array = []
 
 var rows: Control
