@@ -26,6 +26,20 @@ impl From<std::io::Error> for Error {
     }
 }
 
+// Conversion between the different MessageId structs
+// TODO: I assume a CanFrame can only be valid if the id is valid??
+mod dbc_hellpers {
+    use crosscan::can::CanFrame;
+    pub fn get_message_id(frame: &CanFrame) -> Option<can_dbc::MessageId> {
+        use can_dbc::MessageId;
+        if frame.is_extended() {
+            return Some(MessageId::Extended(frame.id()));
+        } else {
+            return Some(MessageId::Standard(frame.id() as u16));
+        }
+    }
+}
+
 pub struct CanParser {
     dbc: Option<DBC>,
 }
@@ -76,29 +90,29 @@ impl CanParser {
         godot_can_entry.push(&GString::from(format!("{:?}", can_entry.freq_hz)).to_variant());
         godot_can_entry.push(&GString::from(format!("{:?}", can_entry.frame.id())).to_variant());
 
-        // Search for a message in the DBC to deserialise this CAN frame
-        let mut message_id_found_in_dbc = false;
+        // Query if a dbc entry exists for this id
         if let Some(dbc) = &self.dbc {
-            for message_info in dbc.messages() {
-                let mut id_with_ext_bit = can_entry.frame.id();
-                if can_entry.frame.is_extended() {
-                    id_with_ext_bit |= 1 << 31
-                }
-                message_id_found_in_dbc = id_with_ext_bit == message_info.message_id().raw();
-                if message_id_found_in_dbc {
-                    godot_can_entry.push(&GString::from(message_info.message_name()).to_variant());
-                    godot_can_entry = self.deserialise_dbc_data(
-                        godot_can_entry,
-                        can_entry.frame.clone(),
-                        message_info,
-                    );
-                    break;
-                }
-            }
-        }
+            let query_id = dbc_hellpers::get_message_id(&can_entry.frame)
+                .expect("Should be infallible on receive");
 
-        // If none were found, deserialise as raw bytes
-        if !message_id_found_in_dbc {
+            // if dbc attempt to deserialize
+            if let Some(message_info) = dbc.messages().iter().find(|m| m.message_id() == &query_id)
+            {
+                godot_can_entry.push(&GString::from(message_info.message_name()).to_variant());
+
+                // TODO: Check if can deserialize
+                godot_can_entry = self.deserialise_dbc_data(
+                    godot_can_entry,
+                    can_entry.frame.clone(),
+                    message_info,
+                );
+            } else {
+                godot_can_entry.push(&GString::from("").to_variant()); // Empty msg name to indicate no definition in the DBC
+                godot_can_entry =
+                    Self::deserialise_unknown_data(godot_can_entry, can_entry.frame.clone());
+            }
+        } else {
+            // otherwise don't deserialize dbc
             godot_can_entry.push(&GString::from("").to_variant()); // Empty msg name to indicate no definition in the DBC
             godot_can_entry =
                 Self::deserialise_unknown_data(godot_can_entry, can_entry.frame.clone());
@@ -176,6 +190,9 @@ impl CanParser {
         mut godot_can_entry: Array<Variant>,
         frame: CanFrame,
     ) -> Array<Variant> {
+        if frame.data().len() == 0 {
+            godot_can_entry.push(&GString::from("").to_variant())
+        }
         for byte in frame.data() {
             godot_can_entry.push(&GString::from(format!("{:?}", byte)).to_variant())
         }

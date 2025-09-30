@@ -242,11 +242,16 @@ class ReceiveTableEntry:
 
 
 	func update(new_frame: Array):
+		
 		var prev_data_size: int = _data.size()
 
 		_last_receive_time_ms = _receive_table.timestamp_to_s(new_frame[TIMESTAMP_IDX])
 		_frequency_hz = float(new_frame[FREQUENCY_IDX])
 		_can_id = int(new_frame[CAN_ID_IDX])
+		
+#		Debugging 
+		#print("Can ID:", "0x" + ("%08x" % _can_id).to_upper())
+		
 		_msg_name = new_frame[MSG_NAME_IDX]
 		_is_extended = new_frame[IS_EXTENDED_IDX].to_lower() == "true"
 		_data = []
