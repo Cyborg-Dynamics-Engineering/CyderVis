@@ -1,21 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=10 format=3 uid="uid://dno8ya28n0fu0"]
 
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
 [ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
-[ext_resource type="PackedScene" uid="uid://bhfrjyg1wbh6j" path="res://assets/tables/transmit_table/transmit_menu/transmit_menu.tscn" id="2_fwcvl"]
 [ext_resource type="Script" uid="uid://f1bhbi0m4dr1" path="res://assets/main/pause_button.gd" id="3_xwkvk"]
 [ext_resource type="Script" uid="uid://cobe8m4jq3bu7" path="res://assets/main/can_format_button.gd" id="5_0i4oc"]
 [ext_resource type="Script" uid="uid://br41fbc8o43jr" path="res://assets/main/dbc_file_button.gd" id="5_by4fb"]
 [ext_resource type="Script" uid="uid://cxmpvhrkegrfn" path="res://assets/plotting/can_graph.gd" id="5_kfbq2"]
 [ext_resource type="PackedScene" uid="uid://dj2at18bricod" path="res://assets/tables/transmit_table/transmit_table.tscn" id="6_67ri8"]
-[ext_resource type="Script" uid="uid://bo416fkw3xwje" path="res://assets/tables/transmit_table/transmit_menu_button.gd" id="9_bsumw"]
+[ext_resource type="Script" uid="uid://ctju5kkovohfu" path="res://assets/tables/transmit_table/add_transmit_button.gd" id="9_by4fb"]
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
 
 [node name="Main" type="Node"]
-
-[node name="TransmitMenu" parent="." instance=ExtResource("2_fwcvl")]
-initial_position = 1
-visible = false
 
 [node name="Background" type="Panel" parent="."]
 anchors_preset = 15
@@ -190,9 +185,9 @@ metadata/_tab_index = 2
 [node name="Table" parent="Background/TabContainer/Transmit" instance=ExtResource("6_67ri8")]
 layout_mode = 1
 offset_left = 10.0
-offset_top = 72.0
+offset_top = 10.0
 offset_right = -18.0
-offset_bottom = -16.0
+offset_bottom = -78.0
 
 [node name="TransmitAddButton" type="Button" parent="Background/TabContainer/Transmit"]
 layout_mode = 1
@@ -201,15 +196,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1251.0
-offset_top = -421.0
-offset_right = -1130.0
-offset_bottom = -371.0
+offset_left = -1256.0
+offset_top = -67.0
+offset_right = -1135.0
+offset_bottom = -17.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
 text = "Add New"
-script = ExtResource("9_bsumw")
+script = ExtResource("9_by4fb")
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 

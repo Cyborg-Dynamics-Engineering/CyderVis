@@ -48,6 +48,9 @@ BO_ 2148008706 TiltAngles: 8 Vector__XXX
     SG_ pitch : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
     SG_ roll : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
 
+BO_ 2148077570 Ack: 4 Vector__XXX
+    SG_ ident : 0|32@1+ (1,0) [0|4294967295] ""  Vector__XXX
+
 BA_DEF_DEF_ "BusType" "CAN";
 
 SIG_VALTYPE_ 2148008706 pitch : 1;
