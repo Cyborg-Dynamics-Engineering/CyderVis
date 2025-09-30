@@ -185,6 +185,7 @@ class TransmitTableEntry:
 		_row.add_child(data_cell)
 
 		# Add byte seperation formatting and character validation for Data box
+		_data_box.placeholder_text = "00 00 00 00 00 00 00 00"
 		_data_box.max_length = 23
 		_data_box.text_changed.connect(
 			func(new_text: String):
