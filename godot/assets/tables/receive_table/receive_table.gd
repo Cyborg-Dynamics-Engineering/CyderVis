@@ -242,16 +242,12 @@ class ReceiveTableEntry:
 
 
 	func update(new_frame: Array):
-		
 		var prev_data_size: int = _data.size()
 
 		_last_receive_time_ms = _receive_table.timestamp_to_s(new_frame[TIMESTAMP_IDX])
 		_frequency_hz = float(new_frame[FREQUENCY_IDX])
 		_can_id = int(new_frame[CAN_ID_IDX])
-		
-#		Debugging 
-		#print("Can ID:", "0x" + ("%08x" % _can_id).to_upper())
-		
+
 		_msg_name = new_frame[MSG_NAME_IDX]
 		_is_extended = new_frame[IS_EXTENDED_IDX].to_lower() == "true"
 		_data = []
@@ -294,8 +290,8 @@ class ReceiveTableEntry:
 		ReceiveTable._update_label_and_font_size(entry_row_cells[CAN_ID_IDX].get_node("Label"), formatted_can_id(), CELL_WIDTHS[CAN_ID_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[MSG_NAME_IDX].get_node("Label"), _msg_name, CELL_WIDTHS[MSG_NAME_IDX])
 	
-		 #If the payload is empty, then display an empty string
-		if len(_data) == 1 && _data[0] == "":
+		# If the payload is empty, then display an empty string
+		if len(_data) == 1 and _data[0] == "":
 			ReceiveTable._update_label_and_font_size(entry_row_cells[DATA_START_IDX].get_node("Label"), "", CELL_WIDTHS[DATA_START_IDX])
 			return
 

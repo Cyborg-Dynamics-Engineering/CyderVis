@@ -27,15 +27,14 @@ impl From<std::io::Error> for Error {
 }
 
 // Conversion between the different MessageId structs
-// TODO: I assume a CanFrame can only be valid if the id is valid??
-mod dbc_hellpers {
+mod dbc_helpers {
     use crosscan::can::CanFrame;
-    pub fn get_message_id(frame: &CanFrame) -> Option<can_dbc::MessageId> {
+    pub fn get_message_id(frame: &CanFrame) -> can_dbc::MessageId {
         use can_dbc::MessageId;
         if frame.is_extended() {
-            return Some(MessageId::Extended(frame.id()));
+            return MessageId::Extended(frame.id());
         } else {
-            return Some(MessageId::Standard(frame.id() as u16));
+            return MessageId::Standard(frame.id() as u16);
         }
     }
 }
@@ -92,8 +91,7 @@ impl CanParser {
 
         // Query if a dbc entry exists for this id
         if let Some(dbc) = &self.dbc {
-            let query_id = dbc_hellpers::get_message_id(&can_entry.frame)
-                .expect("Should be infallible on receive");
+            let query_id = dbc_helpers::get_message_id(&can_entry.frame);
 
             // if dbc attempt to deserialize
             if let Some(message_info) = dbc.messages().iter().find(|m| m.message_id() == &query_id)
