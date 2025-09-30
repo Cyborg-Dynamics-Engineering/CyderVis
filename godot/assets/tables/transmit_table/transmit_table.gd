@@ -21,7 +21,7 @@ const CAN_ID_IDX = 3
 const DATA_IDX = 4
 
 const CELL_HEIGHT = 25
-const CELL_WIDTHS = [60, 60, 120, 100, 250]
+const CELL_WIDTHS = [60, 60, 120, 120, 250]
 
 
 func _ready() -> void:
@@ -139,25 +139,83 @@ class TransmitTableEntry:
 		_transmit_table._update_label_and_font_size(_cycle_time_box, "0", 120)
 		_row.add_child(cycle_time_cell)
 
+		# Only allow numeric characters for cycle time box
+		_cycle_time_box.max_length = 4
+		_cycle_time_box.text_changed.connect(
+			func(new_text: String):
+				var filtered := ""
+				for c in new_text:
+					if c.is_valid_int():
+						filtered += c
+				
+				# Update the text with the invalid characters removed, maintaining the old cursor position
+				var old_cursor_pos := _cycle_time_box.caret_column
+				_cycle_time_box.text = filtered
+				_cycle_time_box.caret_column = min(old_cursor_pos - (new_text.length() - filtered.length()), _cycle_time_box.text.length())
+		)
+
 		# Add Can ID box
 		var can_id_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
 		can_id_cell.custom_minimum_size = Vector2(CELL_WIDTHS[CAN_ID_IDX], CELL_HEIGHT)
 		_can_id_box = can_id_cell.get_node("LineEdit")
-		_transmit_table._update_label_and_font_size(_can_id_box, "000", 120)
+		_transmit_table._update_label_and_font_size(_can_id_box, "000", CELL_WIDTHS[CAN_ID_IDX])
 		_row.add_child(can_id_cell)
+
+		# Only allow valid hex characters for CAN ID box
+		_can_id_box.max_length = 8
+		_can_id_box.text_changed.connect(
+			func(new_text: String):
+				var filtered := ""
+				for c in new_text:
+					if c.is_valid_hex_number():
+						filtered += c
+				
+				# Update the text with the invalid characters removed, maintaining the old cursor position
+				var old_cursor_pos := _can_id_box.caret_column
+				_can_id_box.text = filtered
+				_can_id_box.caret_column = min(old_cursor_pos - (new_text.length() - filtered.length()), _can_id_box.text.length())
+		)
 
 		# Add Data box
 		var data_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
 		data_cell.custom_minimum_size = Vector2(CELL_WIDTHS[DATA_IDX], CELL_HEIGHT)
 		data_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_data_box = data_cell.get_node("LineEdit")
-		_data_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_transmit_table._update_label_and_font_size(_data_box, "", CELL_WIDTHS[DATA_IDX])
 		_row.add_child(data_cell)
 
+		# Add byte seperation formatting and character validation for Data box
+		_data_box.max_length = 23
+		_data_box.text_changed.connect(
+			func(new_text: String):
+				# Filter out non-hex characters
+				var filtered := ""
+				for c in new_text:
+					if c.is_valid_hex_number():
+						filtered += c
+
+				# Add seperation spaces between every byte
+				var bytes := []
+				var start := filtered.length() % 2 # 1 if odd, 0 if even
+				if start == 1:
+					bytes.append(filtered[0]) # first lone char
+				for i in range(start, filtered.length(), 2):
+					bytes.append(filtered.substr(i, 2))
+				filtered = " ".join(bytes)
+
+				# Update the text with the invalid characters removed, maintaining the old cursor position
+				var old_cursor_pos := _data_box.caret_column
+				_data_box.text = filtered
+				_data_box.caret_column = min(old_cursor_pos - (new_text.length() - filtered.length()), _data_box.text.length())
+		)
+
 
 	func can_id() -> int:
-		return int(_can_id_box.text)
+		return _can_id_box.text.replace(" ", "").hex_to_int()
+
+
+	func can_id_valid() -> bool:
+		return _can_id_box.text.replace(" ", "").is_valid_hex_number()
 
 
 	func is_ext_can() -> bool:
@@ -176,11 +234,11 @@ class TransmitTableEntry:
 
 	# Returns the payload data stored in this entry in its original hex format
 	func hex_data() -> String:
-		return _data_box.text
+		return _data_box.text.replace(" ", "")
 	
 
 	func hex_data_valid() -> bool:
-		return _data_box.text.is_empty() or _data_box.text.is_valid_hex_number()
+		return hex_data().is_empty() or hex_data().is_valid_hex_number()
 
 
 	# Returns the payload data stored in this entry converted into a byte array representation
@@ -193,11 +251,18 @@ class TransmitTableEntry:
 		var cycle_time = cycle_time_ms()
 		var current_time_ms := Time.get_ticks_msec()
 		if (current_time_ms - _last_send_time_ms) > cycle_time:
-			if hex_data_valid():
-				_godot_can_bridge.send_can_frame(can_id(), is_ext_can(), data())
-				_last_send_time_ms = current_time_ms
-			else:
+			if not hex_data_valid():
+				_check_box.button_pressed = false
 				AlertHandler.display_error("Invalid hex data provided")
+				return
+			
+			if not can_id_valid():
+				_check_box.button_pressed = false
+				AlertHandler.display_error("Invalid CAN ID provided")
+				return
+
+			_godot_can_bridge.send_can_frame(can_id(), is_ext_can(), data())
+			_last_send_time_ms = current_time_ms
 		
 		# A cycle time of 0ms should be treated as 'one shot', so disable itself after sending the message
 		if cycle_time == 0:
