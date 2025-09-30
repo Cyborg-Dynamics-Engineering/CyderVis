@@ -23,24 +23,29 @@ func update_current_time(new_time_s: float) -> void:
 
 
 # Will add or remove a given plot element from being recorded and plotted
-func toggle_plot_element(can_id: String, label: String) -> void:
-	var element_id: String = can_id + label # A 'plot element' consists of the CAN_ID the series comes from, concatonated with the data label
+func toggle_plot_element(entry: ReceiveTable.ReceiveTableEntry, label: String) -> void:
+	var element_id: String = get_element_id(entry, label)
 
 	if _plot_elements.has(element_id):
 		self.remove_plot_item(_plot_elements[element_id])
 		_plot_elements.erase(element_id)
 	else:
-		_plot_elements[element_id] = self.add_plot_item(label + "(" + can_id + ")", _generate_random_rgb_color(), 1.0)
+		_plot_elements[element_id] = self.add_plot_item(entry.formatted_can_id() + ": " + label, _generate_random_rgb_color(), 1.0)
 
 
 # Returns true if we are currently recording and plotting this element
-func has_plot_element(element_id: String) -> bool:
-	return _plot_elements.has(element_id)
+func has_plot_element(entry: ReceiveTable.ReceiveTableEntry, label: String) -> bool:
+	return _plot_elements.has(get_element_id(entry, label))
 
 
 # Adds a new data point to a plot element currently being plotted
-func add_data_point(element_id: String, timestamp: float, value: float) -> void:
-	_plot_elements[element_id].add_point(Vector2(timestamp, value))
+func add_data_point(entry: ReceiveTable.ReceiveTableEntry, label: String, timestamp: float, value: float) -> void:
+	_plot_elements[get_element_id(entry, label)].add_point(Vector2(timestamp, value))
+
+
+# A 'plot element' consists of the CAN_ID the series comes from, concatenated with the data label
+func get_element_id(entry: ReceiveTable.ReceiveTableEntry, label: String) -> String:
+	return entry.formatted_can_id() + label
 
 
 func _generate_random_rgb_color() -> Color:
