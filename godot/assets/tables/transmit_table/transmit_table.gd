@@ -177,11 +177,15 @@ class TransmitTableEntry:
 	# Returns the payload data stored in this entry in its original hex format
 	func hex_data() -> String:
 		return _data_box.text
+	
+
+	func hex_data_valid() -> bool:
+		return _data_box.text.is_empty() or _data_box.text.is_valid_hex_number()
 
 
 	# Returns the payload data stored in this entry converted into a byte array representation
 	func data() -> Array:
-		return _int_to_bytes(hex_data().hex_to_int())
+		return hex_to_byte_array(hex_data())
 
 
 	# Sends this entry over the CAN interface if cycle time has been exceeded
@@ -189,49 +193,29 @@ class TransmitTableEntry:
 		var cycle_time = cycle_time_ms()
 		var current_time_ms := Time.get_ticks_msec()
 		if (current_time_ms - _last_send_time_ms) > cycle_time:
-			_godot_can_bridge.send_can_frame(can_id(), is_ext_can(), data())
-			_last_send_time_ms = current_time_ms
+			if hex_data_valid():
+				_godot_can_bridge.send_can_frame(can_id(), is_ext_can(), data())
+				_last_send_time_ms = current_time_ms
+			else:
+				AlertHandler.display_error("Invalid hex data provided")
 		
 		# A cycle time of 0ms should be treated as 'one shot', so disable itself after sending the message
 		if cycle_time == 0:
 			_check_box.button_pressed = false
 
 
-	# Converts a 64 bit signed integer into a u8 byte array
-	func _int_to_bytes(value: int) -> Array:
-		var result: Array = []
-		var v := value
+	# Converts a hex string into a u8 byte array
+	func hex_to_byte_array(hex_str: String) -> Array:
+		var bytes: Array = []
 		
-		# Handle zero explicitly
-		if v == 0:
-			return []
+		# Ensure an even number of characters (each byte = 2 hex digits)
+		if hex_str.length() % 2 != 0:
+			hex_str = "0" + hex_str
+
+		# Walk through the string in steps of 2
+		for i in range(0, hex_str.length(), 2):
+			var byte_str := hex_str.substr(i, 2)
+			var byte_val = byte_str.hex_to_int() # parse as hex
+			bytes.append(byte_val)
 		
-		# Work with absolute value for byte extraction
-		var negative := v < 0
-		if negative:
-			v = -v
-		
-		while v > 0:
-			result.append(v & 0xFF) # extract lowest byte
-			v >>= 8
-		
-		# At this point, result is little-endian. Reverse for big-endian if needed.
-		# Minimal length is already guaranteed because we stopped when v == 0.
-		
-		if negative:
-			# Store a sign indicator (convention: prepend 0x80 to first byte)
-			# Or use two's complement encoding – depends on your use case.
-			# Here’s two’s complement with minimal length:
-			var nbytes = result.size()
-			var carry = 1
-			for i in range(nbytes):
-				result[i] = (~result[i] & 0xFF) + carry
-				if result[i] > 0xFF:
-					result[i] &= 0xFF
-					carry = 1
-				else:
-					carry = 0
-			if carry > 0:
-				result.append(1)
-		
-		return result
+		return bytes
