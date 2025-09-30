@@ -293,6 +293,11 @@ class ReceiveTableEntry:
 		ReceiveTable._update_label_and_font_size(entry_row_cells[FREQUENCY_IDX].get_node("Label"), "%.2f" % _frequency_hz, CELL_WIDTHS[FREQUENCY_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[CAN_ID_IDX].get_node("Label"), formatted_can_id(), CELL_WIDTHS[CAN_ID_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[MSG_NAME_IDX].get_node("Label"), _msg_name, CELL_WIDTHS[MSG_NAME_IDX])
+	
+		 #If the payload is empty, then display an empty string
+		if len(_data) == 1 && _data[0] == "":
+			ReceiveTable._update_label_and_font_size(entry_row_cells[DATA_START_IDX].get_node("Label"), "", CELL_WIDTHS[DATA_START_IDX])
+			return
 
 		for i in range(len(_data)):
 			# If this data has been deserialised, format the button cells as strings instead of data bytes
