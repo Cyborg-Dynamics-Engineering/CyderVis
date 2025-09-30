@@ -255,14 +255,11 @@ class ReceiveTableEntry:
 		for i in range(DATA_START_IDX, len(new_frame) - 1):
 			_data.append(new_frame[i])
 
-		# If the message has changed size, regenerate the data row
-		if prev_data_size != _data.size():
+		# Always make sure a row exists before updating labels
+		if not is_instance_valid(_row) or prev_data_size != _data.size():
 			if is_instance_valid(_row):
 				_row.queue_free()
-			
 			_instantiate_labels(new_frame)
-
-		# Else, update the existing labels
 		else:
 			update_labels()
 
