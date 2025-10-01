@@ -184,6 +184,11 @@ func sort_entries() -> void:
 		rows.move_child(existing_can_entries.get(can_ids[i]).get_row(), i + 1)
 
 
+# Returns true if there are no CAN messages in the receive table history
+func is_empty() -> bool:
+	return existing_can_entries.is_empty()
+
+
 class ReceiveTableEntry:
 	var _last_receive_time_ms: float
 	var _frequency_hz: float
