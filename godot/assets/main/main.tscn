@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
 [ext_resource type="Script" uid="uid://f1bhbi0m4dr1" path="res://assets/main/pause_button.gd" id="3_xwkvk"]
 [ext_resource type="Script" uid="uid://br41fbc8o43jr" path="res://assets/main/dbc_file_button.gd" id="5_by4fb"]
-[ext_resource type="Script" uid="uid://cobe8m4jq3bu7" path="res://assets/main/can_format_button.gd" id="5_irre0"]
+[ext_resource type="Script" uid="uid://bag3llny7bxih" path="res://assets/main/can_format_button.gd" id="5_irre0"]
 [ext_resource type="Script" uid="uid://cxmpvhrkegrfn" path="res://assets/plotting/can_graph.gd" id="5_kfbq2"]
 [ext_resource type="PackedScene" uid="uid://dj2at18bricod" path="res://assets/tables/transmit_table/transmit_table.tscn" id="6_67ri8"]
 [ext_resource type="Script" uid="uid://ctju5kkovohfu" path="res://assets/tables/transmit_table/add_transmit_button.gd" id="9_by4fb"]
@@ -155,6 +155,8 @@ grow_vertical = 2
 focus_mode = 0
 text = "Hexadecimal"
 script = ExtResource("5_irre0")
+on_label = "Hexadecimal"
+off_label = "Decimal"
 
 [node name="CanDataFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
 layout_mode = 0
@@ -178,6 +180,33 @@ grow_vertical = 2
 focus_mode = 0
 text = "Hexadecimal"
 script = ExtResource("5_irre0")
+on_label = "Hexadecimal"
+off_label = "Decimal"
+
+[node name="TimeFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 222.0
+offset_right = 128.0
+offset_bottom = 246.0
+text = "Time Format:"
+
+[node name="TimeFormatButton" type="Button" parent="Background/TabContainer/Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 167.0
+offset_top = 214.0
+offset_right = -982.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+text = "Frequency"
+script = ExtResource("5_irre0")
+on_label = "Frequency"
+off_label = "Period"
 
 [node name="Plot" type="Control" parent="Background/TabContainer"]
 visible = false
