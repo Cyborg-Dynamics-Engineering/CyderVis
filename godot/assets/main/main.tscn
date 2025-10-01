@@ -182,15 +182,22 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="LegendLabel" type="Label" parent="Background/TabContainer/Plot"]
+[node name="Panel" type="Panel" parent="Background/TabContainer/Plot"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 38.0
+offset_right = 170.0
+offset_bottom = 402.0
+
+[node name="LegendLabel" type="Label" parent="Background/TabContainer/Plot/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 39.0
-offset_top = 45.0
-offset_right = -1153.0
-offset_bottom = -353.0
+offset_left = 33.0
+offset_top = 8.0
+offset_right = -30.0
+offset_bottom = -322.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 24
@@ -203,7 +210,7 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -476.0
+offset_left = -444.0
 offset_top = -205.0
 offset_right = 627.0
 offset_bottom = 206.0
@@ -214,7 +221,7 @@ background_color = Color(0.180392, 0.180392, 0.180392, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true
 show_mouse_coordinates = false
-legend_x_pos = -175
+legend_x_pos = -205
 legend_y_pos = 50
 metadata/_custom_type_script = "uid://bs2ndl3vun60f"
 
