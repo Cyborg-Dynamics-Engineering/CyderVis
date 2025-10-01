@@ -125,7 +125,7 @@ func update_formatting() -> void:
 		entry.update_labels()
 	
 	# Update the frequency header formatting
-	rows.get_child(0).get_child(FREQUENCY_IDX).get_node("Label").text = "FREQ [Hz]" if time_format_button.format_on() else "T [s]"
+	rows.get_child(0).get_child(FREQUENCY_IDX).get_node("Label").text = "FREQ [Hz]" if time_format_button.format_on() else "T [ms]"
 
 
 # Converts a microsecond system timestamp to seconds from start of program
@@ -340,4 +340,4 @@ class ReceiveTableEntry:
 		if _receive_table.time_format_button.format_on():
 			return "%.2f" % _frequency_hz
 		else:
-			return "%.5f" % (1.0 / _frequency_hz)
+			return "%.2f" % (1000.0 / _frequency_hz)
