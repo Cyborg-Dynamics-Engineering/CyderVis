@@ -182,6 +182,20 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="LegendLabel" type="Label" parent="Background/TabContainer/Plot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 39.0
+offset_top = 45.0
+offset_right = -1153.0
+offset_bottom = -353.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Legend"
+
 [node name="Graph2D" type="Control" parent="Background/TabContainer/Plot"]
 layout_mode = 1
 anchors_preset = 8
@@ -200,7 +214,8 @@ background_color = Color(0.180392, 0.180392, 0.180392, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true
 show_mouse_coordinates = false
-legend_x_pos = -170
+legend_x_pos = -175
+legend_y_pos = 50
 metadata/_custom_type_script = "uid://bs2ndl3vun60f"
 
 [node name="Transmit" type="Control" parent="Background/TabContainer"]
