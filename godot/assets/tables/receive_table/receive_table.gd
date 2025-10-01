@@ -12,6 +12,7 @@ class_name ReceiveTable
 @onready var can_graph: CanGraph = get_tree().current_scene.get_node("Background/TabContainer/Plot/Graph2D")
 @onready var can_id_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/CanIdFormatButton")
 @onready var can_data_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/CanDataFormatButton")
+@onready var time_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/TimeFormatButton")
 @onready var existing_can_entries: Dictionary[int, ReceiveTableEntry] = {}
 @onready var starting_timestamp: int = -1
 
@@ -119,8 +120,12 @@ func clear_row(can_id: int) -> void:
 
 # Re-renders every CAN entry. Useful for updating the table on formatting state changes.
 func update_formatting() -> void:
+	# Update the formatting of each CAN entry
 	for entry: ReceiveTableEntry in existing_can_entries.values():
 		entry.update_labels()
+	
+	# Update the frequency header formatting
+	rows.get_child(0).get_child(FREQUENCY_IDX).get_node("Label").text = "FREQ [Hz]" if time_format_button.format_on() else "T [s]"
 
 
 # Converts a microsecond system timestamp to seconds from start of program
@@ -289,7 +294,7 @@ class ReceiveTableEntry:
 		var entry_row_cells := _row.get_children()
 
 		ReceiveTable._update_label_and_font_size(entry_row_cells[TIMESTAMP_IDX].get_node("Label"), "%.3f" % _last_receive_time_ms, CELL_WIDTHS[TIMESTAMP_IDX])
-		ReceiveTable._update_label_and_font_size(entry_row_cells[FREQUENCY_IDX].get_node("Label"), "%.2f" % _frequency_hz, CELL_WIDTHS[FREQUENCY_IDX])
+		ReceiveTable._update_label_and_font_size(entry_row_cells[FREQUENCY_IDX].get_node("Label"), _formatted_frequency(), CELL_WIDTHS[FREQUENCY_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[CAN_ID_IDX].get_node("Label"), formatted_can_id(), CELL_WIDTHS[CAN_ID_IDX])
 		ReceiveTable._update_label_and_font_size(entry_row_cells[MSG_NAME_IDX].get_node("Label"), _msg_name, CELL_WIDTHS[MSG_NAME_IDX])
 	
@@ -318,7 +323,7 @@ class ReceiveTableEntry:
 
 	func formatted_can_id() -> String:
 		# Assumes 31 bit length
-		if _receive_table.can_id_format_button.use_hex():
+		if _receive_table.can_id_format_button.format_on():
 			return "0x" + ("%08x" % _can_id).to_upper() if is_ext_can() else "0x" + ("%03x" % _can_id).to_upper()
 		else:
 			return "0d" + ("%09d" % _can_id) if is_ext_can() else "0d" + ("%04d" % _can_id)
@@ -326,7 +331,13 @@ class ReceiveTableEntry:
 
 	func _format_can_data_byte(byte: int) -> String:
 		# Assumes 8 bit length
-		if _receive_table.can_data_format_button.use_hex():
+		if _receive_table.can_data_format_button.format_on():
 			return "0x" + ("%02x" % byte).to_upper()
 		else:
 			return "0d" + ("%03d" % byte)
+
+	func _formatted_frequency() -> String:
+		if _receive_table.time_format_button.format_on():
+			return "%.2f" % _frequency_hz
+		else:
+			return "%.5f" % (1.0 / _frequency_hz)
