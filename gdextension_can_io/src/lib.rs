@@ -80,7 +80,10 @@ impl GodotCanBridge {
             Err(e) => {
                 match e {
                     can_parser::Error::Io(error) => {
-                        error_alert_godot(format!("Error trying to open DBC file: {:?}", error))
+                        error_alert_godot(format!(
+                            "Error trying to open DBC file at {dbc_filepath:?}"
+                        ));
+                        godot_error!("{error:?}");
                     }
                     can_parser::Error::CanDbc() => {
                         error_alert_godot(format!("DBC File failed to parse"))
@@ -208,7 +211,10 @@ async fn read_can(
     let mut socket = match CanSocket::open(&interface_name) {
         Ok(sock) => sock,
         Err(err) => {
-            error_alert_godot(format!("Failed to open CAN socket: {err:?}"));
+            error_alert_godot(format!(
+                "Failed to open CAN device, check that {interface_name:?} is up"
+            ));
+            godot_error!("{err:?}");
             return;
         }
     };
