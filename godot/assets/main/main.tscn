@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
 
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
 [ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cxmpvhrkegrfn" path="res://assets/plotting/can_graph.gd" id="5_kfbq2"]
 [ext_resource type="PackedScene" uid="uid://dj2at18bricod" path="res://assets/tables/transmit_table/transmit_table.tscn" id="6_67ri8"]
 [ext_resource type="Script" uid="uid://ctju5kkovohfu" path="res://assets/tables/transmit_table/add_transmit_button.gd" id="9_by4fb"]
+[ext_resource type="Texture2D" uid="uid://cxm8emaglono1" path="res://icon.png" id="9_irre0"]
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
 
 [node name="Main" type="Node"]
@@ -53,10 +54,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 272.0
-offset_top = 10.0
-offset_right = -904.0
-offset_bottom = -380.0
+offset_left = 266.0
+offset_top = 17.0
+offset_right = -910.0
+offset_bottom = -373.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
@@ -68,10 +69,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 145.0
-offset_top = 11.0
-offset_right = -1031.0
-offset_bottom = -385.0
+offset_left = 140.0
+offset_top = 19.0
+offset_right = -1036.0
+offset_bottom = -377.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "can0"
@@ -81,10 +82,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 25.0
-offset_top = 18.0
-offset_right = -1139.0
-offset_bottom = -391.0
+offset_left = 20.0
+offset_top = 26.0
+offset_right = -1144.0
+offset_bottom = -383.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "CAN Interface:"
@@ -94,10 +95,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 144.0
-offset_top = 64.0
-offset_right = -670.0
-offset_bottom = -332.0
+offset_left = 140.0
+offset_top = 69.0
+offset_right = -674.0
+offset_bottom = -327.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "No DBC file"
@@ -108,10 +109,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 66.0
-offset_top = 70.0
-offset_right = -1139.0
-offset_bottom = -339.0
+offset_left = 62.0
+offset_top = 75.0
+offset_right = -1143.0
+offset_bottom = -334.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "DBC File:	"
@@ -121,10 +122,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 625.0
-offset_top = 62.0
-offset_right = -551.0
-offset_bottom = -328.0
+offset_left = 627.0
+offset_top = 67.0
+offset_right = -549.0
+offset_bottom = -323.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
@@ -133,10 +134,10 @@ script = ExtResource("5_by4fb")
 
 [node name="CanIdFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
 layout_mode = 0
-offset_left = 34.0
-offset_top = 123.0
-offset_right = 153.0
-offset_bottom = 146.0
+offset_left = 50.0
+offset_top = 135.0
+offset_right = 169.0
+offset_bottom = 158.0
 text = "CAN ID Format:"
 
 [node name="CanIdFormatButton" type="Button" parent="Background/TabContainer/Interface"]
@@ -144,10 +145,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 160.0
-offset_top = 115.0
-offset_right = -987.0
-offset_bottom = -275.0
+offset_left = 176.0
+offset_top = 127.0
+offset_right = -971.0
+offset_bottom = -263.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
@@ -156,10 +157,10 @@ script = ExtResource("5_irre0")
 
 [node name="CanDataFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 179.0
-offset_right = 154.0
-offset_bottom = 202.0
+offset_left = 31.0
+offset_top = 191.0
+offset_right = 170.0
+offset_bottom = 214.0
 text = "CAN Data Format:"
 
 [node name="CanDataFormatButton" type="Button" parent="Background/TabContainer/Interface"]
@@ -167,10 +168,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 160.0
-offset_top = 170.0
-offset_right = -987.0
-offset_bottom = -220.0
+offset_left = 176.0
+offset_top = 182.0
+offset_right = -971.0
+offset_bottom = -208.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
@@ -253,6 +254,16 @@ grow_vertical = 0
 focus_mode = 0
 text = "Add New"
 script = ExtResource("9_by4fb")
+
+[node name="TextureRect" type="TextureRect" parent="Background"]
+layout_mode = 0
+offset_left = 1125.0
+offset_top = 375.0
+offset_right = 1271.0
+offset_bottom = 503.0
+texture = ExtResource("9_irre0")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 
