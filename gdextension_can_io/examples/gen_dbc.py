@@ -182,15 +182,154 @@ messages = [
         "lp_div": {"type": "u8", "unit": ""},
     }
 },
-
-
 {
-    "name": "TiltAngles",
-    "id": "80302",
+    "name": "SetGyroFilter",
+    "id": "10502",
+    "extended_id": True,
+    "signals" :{
+        "odr_div": {"type": "u8", "unit": ""},
+        "lp_div": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "SetAccelResolution",
+    "id": "10602",
+    "extended_id": True,
+    "signals" :{
+        "full_scale": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "SetGyroResolution",
+    "id": "10702",
+    "extended_id": True,
+    "signals" :{
+        "full_scale": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "SetDeviceOrientation",
+    "id": "10802",
     "extended_id": True,
     "signals" :{
         "pitch": {"type": "u32", "unit": "degrees"},
         "roll": {"type": "u32", "unit": "degrees"}
+    }
+},
+{
+    "name": "DeviceId",
+    "id": "40102",
+    "extended_id": True,
+    "signals" :{
+        "id": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "GyroFilter",
+    "id": "40202",
+    "extended_id": True,
+    "signals" :{
+        "odr_div": {"type": "u8", "unit": ""},
+        "lp_div": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "AccelFilter",
+    "id": "40302",
+    "extended_id": True,
+    "signals" :{
+        "odr_div": {"type": "u8", "unit": ""},
+        "lp_div": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "AccelResolution",
+    "id": "40402",
+    "extended_id": True,
+    "signals" :{
+        "full_scale": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "GyroResolution",
+    "id": "40502",
+    "extended_id": True,
+    "signals" :{
+        "full_scale": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "ComplementaryFilter",
+    "id": "40602",
+    "extended_id": True,
+    "signals" :{
+        "alpha": {"type": "u32", "unit": ""},
+        "odr": {"type": "u8", "unit": ""},
+        "output_type": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "GetScalingFactors",
+    "id": "40702",
+    "extended_id": True,
+    "signals" :{
+    }
+},
+{
+    "name": "GetConfig",
+    "id": "40802",
+    "extended_id": True,
+    "signals" :{
+    }
+},
+{
+    "name": "GetSensorFreqFine",
+    "id": "40902",
+    "extended_id": True,
+    "signals" :{
+    }
+},
+{
+    "name": "SensorFreqFine",
+    "id": "41002",
+    "extended_id": True,
+    "signals" :{
+        "fine": {"type": "u32", "unit": ""},
+    }
+},
+{
+    "name": "GyroBias",
+    "id": "41102",
+    "extended_id": True,
+    "signals" :{
+        "x": {"type": "i16", "unit": ""},
+        "y": {"type": "i16", "unit": ""},
+        "z": {"type": "i16", "unit": ""},
+    }
+},
+{
+    "name": "CanSpeed",
+    "id": "41202",
+    "extended_id": True,
+    "signals" :{
+        "can_bitrate": {"type": "u8", "unit": ""},
+    }
+},
+{
+    "name": "DeviceOrientation",
+    "id": "41302",
+    "extended_id": True,
+    "signals" :{
+        "pitch": {"type": "u32", "unit": "degrees"},
+        "roll": {"type": "u32", "unit": "degrees"}
+    }
+},
+{
+    "name": "StatusRate",
+    "id": "41402",
+    "extended_id": True,
+    "signals" :{
+        "status_rate": {"type": "u8", "unit": ""},
     }
 },
 {
@@ -213,7 +352,33 @@ messages = [
         "z": {"type": "i16", "unit": ""},
     }
 },
-
+{
+    "name": "TiltAngles",
+    "id": "80302",
+    "extended_id": True,
+    "signals" :{
+        "pitch": {"type": "u32", "unit": "degrees"},
+        "roll": {"type": "u32", "unit": "degrees"}
+    }
+},
+{
+    "name": "QuatWX",
+    "id": "80402",
+    "extended_id": True,
+    "signals" :{
+        "w": {"type": "u32", "unit": "degrees"},
+        "x": {"type": "u32", "unit": "degrees"}
+    }
+},
+{
+    "name": "QuatYZ",
+    "id": "80502",
+    "extended_id": True,
+    "signals" :{
+        "y": {"type": "u32", "unit": "degrees"},
+        "z": {"type": "u32", "unit": "degrees"}
+    }
+},
 ]
 
 print(gen_dbc(messages))

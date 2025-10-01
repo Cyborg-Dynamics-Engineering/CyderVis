@@ -83,9 +83,65 @@ BO_ 2147550210 SetAccelFilter: 2 Vector__XXX
     SG_ odr_div : 0|8@1+ (1,0) [0|0] "" Vector__XXX
     SG_ lp_div : 8|8@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 2148008706 TiltAngles: 8 Vector__XXX
+BO_ 2147550466 SetGyroFilter: 2 Vector__XXX
+    SG_ odr_div : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ lp_div : 8|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147550722 SetAccelResolution: 1 Vector__XXX
+    SG_ full_scale : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147550978 SetGyroResolution: 1 Vector__XXX
+    SG_ full_scale : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147551234 SetDeviceOrientation: 8 Vector__XXX
     SG_ pitch : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
     SG_ roll : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+
+BO_ 2147746050 DeviceId: 1 Vector__XXX
+    SG_ id : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147746306 GyroFilter: 2 Vector__XXX
+    SG_ odr_div : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ lp_div : 8|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147746562 AccelFilter: 2 Vector__XXX
+    SG_ odr_div : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ lp_div : 8|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147746818 AccelResolution: 1 Vector__XXX
+    SG_ full_scale : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147747074 GyroResolution: 1 Vector__XXX
+    SG_ full_scale : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147747330 ComplementaryFilter: 6 Vector__XXX
+    SG_ alpha : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ odr : 32|8@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ output_type : 40|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147747586 GetScalingFactors: 0 Vector__XXX
+
+BO_ 2147747842 GetConfig: 0 Vector__XXX
+
+BO_ 2147748098 GetSensorFreqFine: 0 Vector__XXX
+
+BO_ 2147749890 SensorFreqFine: 4 Vector__XXX
+    SG_ fine : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147750146 GyroBias: 6 Vector__XXX
+    SG_ x : 0|16@1- (1,0) [0|0] "" Vector__XXX
+    SG_ y : 16|16@1- (1,0) [0|0] "" Vector__XXX
+    SG_ z : 32|16@1- (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147750402 CanSpeed: 1 Vector__XXX
+    SG_ can_bitrate : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147750658 DeviceOrientation: 8 Vector__XXX
+    SG_ pitch : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+    SG_ roll : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+
+BO_ 2147750914 StatusRate: 1 Vector__XXX
+    SG_ status_rate : 0|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 2148008194 GyroData: 6 Vector__XXX
     SG_ x : 0|16@1- (1,0) [0|0] "" Vector__XXX
@@ -97,7 +153,20 @@ BO_ 2148008450 AccelData: 6 Vector__XXX
     SG_ y : 16|16@1- (1,0) [0|0] "" Vector__XXX
     SG_ z : 32|16@1- (1,0) [0|0] "" Vector__XXX
 
+BO_ 2148008706 TiltAngles: 8 Vector__XXX
+    SG_ pitch : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+    SG_ roll : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+
+BO_ 2148008962 QuatWX: 8 Vector__XXX
+    SG_ w : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+    SG_ x : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+
+BO_ 2148009218 QuatYZ: 8 Vector__XXX
+    SG_ y : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+    SG_ z : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+
 BA_DEF_DEF_ "BusType" "CAN";
 
 SIG_VALTYPE_ 2148008706 pitch : 1;
 SIG_VALTYPE_ 2148008706 roll : 1;
+SIG_VALTYPE_ 2147549954 alpha : 1;
