@@ -15,10 +15,11 @@ var label: String:
 		return label
 
 ## Line color
-var color: Color = Color.WHITE:
+var color: Color:
 	set(value):
-		color = value
 		_curve.color = color
+	get:
+		return _curve.color
 
 ## Line thickness
 var thickness: float = 1.0:
