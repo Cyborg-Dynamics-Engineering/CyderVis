@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=10 format=3 uid="uid://dno8ya28n0fu0"]
 
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
 [ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://cxmpvhrkegrfn" path="res://assets/plotting/can_graph.gd" id="5_kfbq2"]
 [ext_resource type="PackedScene" uid="uid://dj2at18bricod" path="res://assets/tables/transmit_table/transmit_table.tscn" id="6_67ri8"]
 [ext_resource type="Script" uid="uid://ctju5kkovohfu" path="res://assets/tables/transmit_table/add_transmit_button.gd" id="9_by4fb"]
-[ext_resource type="Texture2D" uid="uid://cxm8emaglono1" path="res://icon.png" id="9_irre0"]
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
 
 [node name="Main" type="Node"]
@@ -256,16 +255,6 @@ grow_vertical = 0
 focus_mode = 0
 text = "Add New"
 script = ExtResource("9_by4fb")
-
-[node name="TextureRect" type="TextureRect" parent="Background"]
-layout_mode = 0
-offset_left = 1239.0
-offset_top = 329.0
-offset_right = 1278.0
-offset_bottom = 364.0
-texture = ExtResource("9_irre0")
-expand_mode = 1
-stretch_mode = 4
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 
