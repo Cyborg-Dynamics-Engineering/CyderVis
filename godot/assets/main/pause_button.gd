@@ -4,6 +4,7 @@ class_name PauseButton
 @onready var _can_bridge: GodotCanBridge = get_tree().current_scene.get_node("GodotCanBridge")
 @onready var _interface_box: LineEdit = get_parent().get_node("CanInterfaceBox")
 @onready var _tab_container: TabContainer = get_tree().current_scene.get_node("Background/TabContainer")
+@onready var _receive_table: ReceiveTable = get_tree().current_scene.get_node("Background/Table")
 
 var _is_paused: bool
 
@@ -60,6 +61,8 @@ func _update_text() -> void:
 
 # Updates the selectability of the tabs (Can only use the tabs when an interface is actively connected)
 func _update_tab_selectability() -> void:
+	var should_disable_tabs: bool = _is_paused and _receive_table.is_empty()
+
 	const NUM_TABS: int = 3
 	for i in range(1, NUM_TABS):
-		_tab_container.set_tab_disabled(i, _is_paused)
+		_tab_container.set_tab_disabled(i, should_disable_tabs)
