@@ -102,7 +102,7 @@ extends Control
 		grid_horizontal_visible = value
 		_update_graph()
 ## Horizontal grid color
-@export var grid_horizontal_color: Color = Color(1,1,1,0.3):
+@export var grid_horizontal_color: Color = Color(1, 1, 1, 0.3):
 	set(value):
 		grid_horizontal_color = value
 		_update_graph()
@@ -112,9 +112,14 @@ extends Control
 		grid_vertical_visible = value
 		_update_graph()
 ## Vertical grid color
-@export var grid_vertical_color: Color = Color(1,1,1,0.3):
+@export var grid_vertical_color: Color = Color(1, 1, 1, 0.3):
 	set(value):
 		grid_vertical_color = value
+		_update_graph()
+## Shows mouse coordinates
+@export var show_mouse_coordinates: bool = true:
+	set(value):
+		show_mouse_coordinates = value
 		_update_graph()
 
 #endregion
@@ -153,8 +158,8 @@ func _ready():
 	plot_area.anchor_bottom = 1.0
 	plot_area.offset_left = _MARGIN_LEFT
 	plot_area.offset_top = _MARGIN_TOP
-	plot_area.offset_right = -_MARGIN_RIGHT
-	plot_area.offset_bottom = -_MARGIN_BOTTOM
+	plot_area.offset_right = - _MARGIN_RIGHT
+	plot_area.offset_bottom = - _MARGIN_BOTTOM
 	add_child(plot_area)
 	
 	var axis = _Graph2DAxis.new()
@@ -180,14 +185,16 @@ func _ready():
 	_update_graph()
 
 func _input(event: InputEvent) -> void:
-
 	if event is InputEventMouseMotion:
 		var plot_rect: Rect2 = Rect2(Vector2.ZERO, get_node("PlotArea").size)
 		
-		if plot_rect.has_point(get_node("PlotArea").get_local_mouse_position()):
-			var pos: Vector2i = get_node("PlotArea").get_local_mouse_position()
-			var point = _pixel_to_coordinate(pos)
-			get_node("PlotArea/Coordinate").text = "(%.3f, %.3f)" % [point.x, point.y]
+		if show_mouse_coordinates:
+			if plot_rect.has_point(get_node("PlotArea").get_local_mouse_position()):
+				var pos: Vector2i = get_node("PlotArea").get_local_mouse_position()
+				var point = _pixel_to_coordinate(pos)
+				get_node("PlotArea/Coordinate").text = "(%.3f, %.3f)" % [point.x, point.y]
+		else:
+			get_node("PlotArea/Coordinate").text = ""
 
 ## Add plot to the graph and return an instance of plot.
 func add_plot_item(label = "", color = Color.WHITE, width = 1.0) -> PlotItem:
@@ -199,7 +206,7 @@ func add_plot_item(label = "", color = Color.WHITE, width = 1.0) -> PlotItem:
 ## Remove plot from the graph.
 func remove_plot_item(plot: PlotItem):
 	# remove from plot_list
-	var new_plot_list = _plots.filter(func(p): return p!=plot)
+	var new_plot_list = _plots.filter(func(p): return p != plot)
 	_plots = new_plot_list
 
 	plot.delete()
@@ -207,7 +214,7 @@ func remove_plot_item(plot: PlotItem):
 
 ## Remove all plots inside graph.
 func remove_all() -> void:
-	for p:PlotItem in _plots:
+	for p: PlotItem in _plots:
 		remove_plot_item(p)
 
 ## Return number of plots
@@ -236,12 +243,12 @@ func _update_graph() -> void:
 	get_node("Axis").show_y_numbers = show_y_numbers
 	get_node("Axis").show_vertical_line = show_vertical_line
 	get_node("Grid").grid_horizontal_color = grid_horizontal_color
-	get_node("Grid").grid_vertical_color= grid_vertical_color
+	get_node("Grid").grid_vertical_color = grid_vertical_color
 	var margin_left: float = _MARGIN_LEFT if get_node("Axis").y_label == "" else _MARGIN_LEFT + 20
 	var margin_bottom: float = _MARGIN_BOTTOM if get_node("Axis").x_label == "" else _MARGIN_BOTTOM + 20
 	
 	get_node("PlotArea").offset_left = margin_left
-	get_node("PlotArea").offset_bottom = -margin_bottom
+	get_node("PlotArea").offset_bottom = - margin_bottom
 	
 	# Vertical Graduation
 	var y_step = _get_min_step(y_min, y_max)
@@ -262,7 +269,7 @@ func _update_graph() -> void:
 	var vert_grad_step_px = area_height / (vert_grad_number - 1)
 	# Plot area width in pixel
 	var area_width = size.x - margin_left - _MARGIN_RIGHT
-	var hor_grad_step_px = area_width / (hor_grad_number -1)
+	var hor_grad_step_px = area_width / (hor_grad_number - 1)
 	
 	var vert_grad: Array
 	var hor_grid: Array
@@ -273,7 +280,7 @@ func _update_graph() -> void:
 		var grad: Array = []
 		grad_px.y = _MARGIN_TOP + n * vert_grad_step_px
 		grad.append(grad_px)
-		var grad_text = "%0.1f" % (float(y_max) - n * float(y_axis_range)/(vert_grad_number-1))
+		var grad_text = "%0.1f" % (float(y_max) - n * float(y_axis_range) / (vert_grad_number - 1))
 		grad.append(grad_text)
 		vert_grad.append(grad)
 		
@@ -300,7 +307,7 @@ func _update_graph() -> void:
 		var grad: Array = []
 		grad_px.x = margin_left + n * hor_grad_step_px
 		grad.append(grad_px)
-		var grad_text = "%0.1f" % (float(x_min) + n * float(x_axis_range)/(hor_grad_number-1))
+		var grad_text = "%0.1f" % (float(x_min) + n * float(x_axis_range) / (hor_grad_number - 1))
 		grad.append(grad_text)
 		hor_grad.append(grad)
 		
@@ -344,13 +351,13 @@ func _on_plot_area_resized() -> void:
 # This function return the minimal step
 func _get_min_step(value_min, value_max):
 	var range_log: int = int(_log10(value_max - value_min))
-	var step: float = 10.0**(range_log-1)
+	var step: float = 10.0 ** (range_log - 1)
 #	print("min step: %f " % [step])
 	return step
 
 func _get_graduation_num(value_min, value_max, step, orientation) -> int:
 	var diff = value_max - value_min
-	var nb_grad: int = roundi(diff/step)
+	var nb_grad: int = roundi(diff / step)
 	var max_grad_num: int
 	match orientation:
 		"vert":
@@ -386,11 +393,11 @@ func _get_graduation_num(value_min, value_max, step, orientation) -> int:
 	return nb_grad + 1
 	
 func _get_min_value(min_value, max_value, step):
-	var min_token = roundf(min_value/step) * step
+	var min_token = roundf(min_value / step) * step
 	
 	while true:
 		var diff = max_value - min_token
-		var nb_grad: int = roundi(diff/step)
+		var nb_grad: int = roundi(diff / step)
 		
 		while nb_grad > 10:
 	#		print("->", nb_grad)
@@ -417,11 +424,11 @@ func _get_min_value(min_value, max_value, step):
 		min_token -= step
 	
 func _get_max_value(min_value, max_value, step):
-	var max_token = roundf(max_value/step) * step
+	var max_token = roundf(max_value / step) * step
 	
 	while true:
 		var diff = max_token - min_value
-		var nb_grad: int = roundi(diff/step)
+		var nb_grad: int = roundi(diff / step)
 
 		while nb_grad > 10:
 	#		print("->", nb_grad)
@@ -448,4 +455,4 @@ func _get_max_value(min_value, max_value, step):
 		max_token += step
 		
 func _log10(value: float) -> float:
-	return log(value)/log(10)
+	return log(value) / log(10)

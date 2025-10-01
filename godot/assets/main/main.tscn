@@ -199,6 +199,7 @@ script = ExtResource("5_kfbq2")
 background_color = Color(0.180392, 0.180392, 0.180392, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true
+show_mouse_coordinates = false
 metadata/_custom_type_script = "uid://bs2ndl3vun60f"
 
 [node name="Transmit" type="Control" parent="Background/TabContainer"]
