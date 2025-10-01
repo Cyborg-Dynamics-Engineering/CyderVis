@@ -158,15 +158,26 @@ BO_ 2148008706 TiltAngles: 8 Vector__XXX
     SG_ roll : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
 
 BO_ 2148008962 QuatWX: 8 Vector__XXX
-    SG_ w : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
-    SG_ x : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+    SG_ w : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ x : 32|32@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 2148009218 QuatYZ: 8 Vector__XXX
-    SG_ y : 0|32@1+ (1,0) [0|0] "degrees" Vector__XXX
-    SG_ z : 32|32@1+ (1,0) [0|0] "degrees" Vector__XXX
+    SG_ y : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ z : 32|32@1+ (1,0) [0|0] "" Vector__XXX
 
 BA_DEF_DEF_ "BusType" "CAN";
 
+SIG_VALTYPE_ 2147549442 accel_scale : 1;
+SIG_VALTYPE_ 2147549442 gyro_scale : 1;
+SIG_VALTYPE_ 2147549954 alpha : 1;
+SIG_VALTYPE_ 2147551234 pitch : 1;
+SIG_VALTYPE_ 2147551234 roll : 1;
+SIG_VALTYPE_ 2147747330 alpha : 1;
+SIG_VALTYPE_ 2147750658 pitch : 1;
+SIG_VALTYPE_ 2147750658 roll : 1;
 SIG_VALTYPE_ 2148008706 pitch : 1;
 SIG_VALTYPE_ 2148008706 roll : 1;
-SIG_VALTYPE_ 2147549954 alpha : 1;
+SIG_VALTYPE_ 2148008962 w : 1;
+SIG_VALTYPE_ 2148008962 x : 1;
+SIG_VALTYPE_ 2148008962 y : 1;
+SIG_VALTYPE_ 2148008962 z : 1;

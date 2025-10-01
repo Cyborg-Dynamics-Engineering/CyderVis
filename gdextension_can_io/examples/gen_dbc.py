@@ -366,8 +366,8 @@ messages = [
     "id": "80402",
     "extended_id": True,
     "signals" :{
-        "w": {"type": "u32", "unit": "degrees"},
-        "x": {"type": "u32", "unit": "degrees"}
+        "w": {"type": "u32", "unit": ""},
+        "x": {"type": "u32", "unit": ""}
     }
 },
 {
@@ -375,8 +375,8 @@ messages = [
     "id": "80502",
     "extended_id": True,
     "signals" :{
-        "y": {"type": "u32", "unit": "degrees"},
-        "z": {"type": "u32", "unit": "degrees"}
+        "y": {"type": "u32", "unit": ""},
+        "z": {"type": "u32", "unit": ""}
     }
 },
 ]
