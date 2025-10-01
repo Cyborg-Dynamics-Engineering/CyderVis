@@ -121,6 +121,16 @@ extends Control
 	set(value):
 		show_mouse_coordinates = value
 		_update_graph()
+## X position of legend
+@export var legend_x_pos: int = 10:
+	set(value):
+		legend_x_pos = value
+		_update_graph()
+## Y position of legend
+@export var legend_y_pos: int = 10:
+	set(value):
+		legend_y_pos = value
+		_update_graph()
 
 #endregion
 
@@ -340,7 +350,7 @@ func _update_legend() -> void:
 			name = p.label,
 			color = p.color,
 		})
-	get_node("PlotArea/Legend").update(labels)
+	get_node("PlotArea/Legend").update(labels, legend_x_pos, legend_y_pos)
 
 func _on_Graph_resized() -> void:
 	_update_graph()

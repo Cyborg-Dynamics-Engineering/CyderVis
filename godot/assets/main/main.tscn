@@ -189,10 +189,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -590.0
-offset_top = -205.5
-offset_right = 590.0
-offset_bottom = 205.5
+offset_left = -476.0
+offset_top = -205.0
+offset_right = 627.0
+offset_bottom = 206.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_kfbq2")
@@ -200,6 +200,7 @@ background_color = Color(0.180392, 0.180392, 0.180392, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true
 show_mouse_coordinates = false
+legend_x_pos = -170
 metadata/_custom_type_script = "uid://bs2ndl3vun60f"
 
 [node name="Transmit" type="Control" parent="Background/TabContainer"]
