@@ -9,7 +9,10 @@ func _ready():
 	layout.position.y = 20
 	add_child(layout)
 
-func update(labels):
+func update(labels, new_x_pos, new_y_pos):
+	layout.position.x = new_x_pos
+	layout.position.y = new_y_pos
+
 	for child in layout.get_children():
 		layout.remove_child(child)
 		child.queue_free()

@@ -214,7 +214,7 @@ class ReceiveTableEntry:
 				var is_button = (i >= DATA_START_IDX) and (i % 2 == 0)
 				if is_button:
 					cell = _receive_table.table_button.instantiate()
-					cell.pressed.connect(_receive_table.can_graph.toggle_plot_element.bind(str(_can_id), str(frame[i])))
+					cell.pressed.connect(_receive_table.can_graph.toggle_plot_element.bind(self, str(frame[i])))
 				else:
 					cell = _receive_table.table_cell.instantiate()
 
@@ -303,9 +303,9 @@ class ReceiveTableEntry:
 					ReceiveTable._update_label_and_font_size(entry_row_cells[DATA_START_IDX + i].get_node("Label"), _data[i], CELL_WIDTHS[DATA_START_IDX])
 
 					# If the can graph is plotting this data point, forward it to the graph
-					var element_identifier: String = str(_can_id) + _data[i - 1]
-					if _receive_table.can_graph.has_plot_element(element_identifier):
-						_receive_table.can_graph.add_data_point(element_identifier, _last_receive_time_ms, float(_data[i]))
+					var label: String = _data[i - 1]
+					if _receive_table.can_graph.has_plot_element(self, label):
+						_receive_table.can_graph.add_data_point(self, label, _last_receive_time_ms, float(_data[i]))
 			else:
 				# For regular labels, update with CAN byte formatting
 				ReceiveTable._update_label_and_font_size(entry_row_cells[DATA_START_IDX + i].get_node("Label"), _format_can_data_byte(int(_data[i])), CELL_WIDTHS[DATA_START_IDX])
