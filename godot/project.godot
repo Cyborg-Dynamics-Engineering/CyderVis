@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Cyder Vis"
+config/name="CyderVis - An Open-Source CAN Visualizer"
 run/main_scene="uid://dno8ya28n0fu0"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 boot_splash/bg_color=Color(0.12156863, 0.12156863, 0.12156863, 1)
