@@ -254,6 +254,7 @@ grid_vertical_visible = true
 show_mouse_coordinates = false
 legend_x_pos = -205
 legend_y_pos = 50
+legend_max_width = 140
 metadata/_custom_type_script = "uid://bs2ndl3vun60f"
 
 [node name="Transmit" type="Control" parent="Background/TabContainer"]
