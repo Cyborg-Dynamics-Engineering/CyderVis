@@ -13,6 +13,8 @@ config_version=5
 config/name="Cyder Vis"
 run/main_scene="uid://dno8ya28n0fu0"
 config/features=PackedStringArray("4.5", "GL Compatibility")
+boot_splash/bg_color=Color(0.12156863, 0.12156863, 0.12156863, 1)
+boot_splash/image="uid://d4jwdrewcuifa"
 config/icon="uid://cxm8emaglono1"
 
 [display]

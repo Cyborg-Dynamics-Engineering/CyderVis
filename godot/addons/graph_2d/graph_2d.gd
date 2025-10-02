@@ -131,6 +131,11 @@ extends Control
 	set(value):
 		legend_y_pos = value
 		_update_graph()
+## Max width of legend labels
+@export var legend_max_width: int = 150:
+	set(value):
+		legend_max_width = value
+		_update_graph()
 
 #endregion
 
@@ -350,7 +355,7 @@ func _update_legend() -> void:
 			name = p.label,
 			color = p.color,
 		})
-	get_node("PlotArea/Legend").update(labels, legend_x_pos, legend_y_pos)
+	get_node("PlotArea/Legend").update(labels, legend_x_pos, legend_y_pos, legend_max_width)
 
 func _on_Graph_resized() -> void:
 	_update_graph()
