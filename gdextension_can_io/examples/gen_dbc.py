@@ -1,3 +1,7 @@
+# This script is used to generate the body of a dbc file. 
+# The intention is to define a list of dictionaries that describe the messages 
+# and signals and write those to a file. See the example below.
+
 def type_to_signed_size(type_str):
     signed = "-"
     if type_str[0] == "u":
