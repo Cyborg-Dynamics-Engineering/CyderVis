@@ -18,17 +18,17 @@ Follow the installation and usage instructions in the official [win-can-utils RE
 1. Visit the [CyderVis Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page on GitHub.  
 2. Under the latest release, expand the **Assets** dropdown and download the Windows `.zip` package.
 
-   ![Releases](releases.png)
+   ![Releases](getting_started/releases.png)
 
 3. Extract the downloaded `.zip` file to your preferred location.  
 4. Run the executable file:  
    **`CyderVis_vx.x.x_windows.exe`**
 
-   ![Run Program](run_program.png)
+   ![Run Program](getting_started/run_program.png)
 
 Once launched, the **CyderVis** window will open:
 
-![CyderVis Open](cydervis_opened.png)
+![CyderVis Open](getting_started/cydervis_opened.png)
 
 ---
 
@@ -43,7 +43,7 @@ canserver gsusb -b 1000000
 
 This will start the CAN interface (usually named `can0` by default).
 
-![Start canserver](start_canserver.png)
+![Start canserver](getting_started/start_canserver.png)
 
 > 💡 **Note:**  
 > The `canserver` must remain running while CyderVis is active.  
@@ -59,7 +59,7 @@ This will start the CAN interface (usually named `can0` by default).
 
 If other devices are active on the bus, incoming CAN frames will begin streaming into CyderVis and appear in the viewing table.
 
-![CyderVis Streaming](cydervis_streaming.png)
+![CyderVis Streaming](getting_started/cydervis_streaming.png)
 
 ---
 
@@ -68,7 +68,7 @@ If other devices are active on the bus, incoming CAN frames will begin streaming
 Use the display option toggles to customize how CAN data is displayed.  
 These toggles control message formatting and visualization preferences.
 
-![CyderVis Display Options](cydervis_display_options.png)
+![CyderVis Display Options](getting_started/cydervis_display_options.png)
 
 ---
 
@@ -86,7 +86,7 @@ To load a `.dbc` file:
 2. Select your `.dbc` file.
 3. Once loaded, decoded frames will automatically appear in the viewing table.
 
-![CyderVis Decoded Frames](cydervis_decoded_frames.png)
+![CyderVis Decoded Frames](getting_started/cydervis_decoded_frames.png)
 
 ---
 
@@ -95,7 +95,7 @@ To load a `.dbc` file:
 1. Open the **Plot** tab.  
 2. Click on any decoded variable name in the viewing table to toggle it on or off in the plot view.
 
-![CyderVis Plotting](cydervis_plotting.png)
+![CyderVis Plotting](getting_started/cydervis_plotting.png)
 
 > 💡 **Note:**  
 > Data must be decoded using a .dbc file to enable plotting.
