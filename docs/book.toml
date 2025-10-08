@@ -1,0 +1,11 @@
+[book]
+authors = ["Ryan Marple"]
+language = "en"
+src = "src"
+title = "CyderVis Documentation"
+
+[build]
+build-dir = "book"
+
+[output.html]
+additional-css = ["src/custom.css"]
