@@ -9,3 +9,4 @@ build-dir = "book"
 
 [output.html]
 additional-css = ["src/custom.css"]
+site-url = "/cyder-vis/"
