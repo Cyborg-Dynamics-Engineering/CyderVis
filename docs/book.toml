@@ -9,5 +9,5 @@ build-dir = "book"
 
 [output.html]
 additional-css = ["src/custom.css"]
-site-url = "https://cyborg-dynamics-engineering.github.io/cyder-vis/"
+site-url = "/cyder-vis/"
 use-absolute-links = true
