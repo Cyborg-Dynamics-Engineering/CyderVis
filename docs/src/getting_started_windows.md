@@ -18,7 +18,7 @@ Follow the installation and usage instructions in the official [win-can-utils RE
 1. Visit the [CyderVis Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page on GitHub.  
 2. Under the latest release, expand the **Assets** dropdown and download the Windows `.zip` package.
 
-   ![Releases](images/releases.png)
+   ![Releases](images/releases_windows.png)
 
 3. Extract the downloaded `.zip` file to your preferred location.  
 4. Run the executable file:  
@@ -99,6 +99,24 @@ To load a `.dbc` file:
 
 > 💡 **Note:**  
 > Data must be decoded using a .dbc file to enable plotting.
+
+---
+
+## Step 8: Transmitting Frames
+
+1. Open the **Transmit** tab.
+2. Press 'Add New' to create a new message.
+3. Fill out the Cycle Time, Frame ID and Data fields.
+4. Click the 'Send' checkbox to begin transmitting.
+
+> 💡 **Notes:**  
+> 1. A **Cycle Time** of `0` designates a *one-shot* message — it sends once each time you click the **Send** checkbox.  
+> 2. Frame ID values above `0x7FF` are always treated as *extended IDs*.  
+>    To designate IDs below `0x7FF`, add leading zeros:  
+>    - `0x7FF` → standard ID  
+>    - `0x07FF` → extended ID  
+>    - `0x000` → standard ID  
+>    - `0x0000` → extended ID
 
 ---
 
