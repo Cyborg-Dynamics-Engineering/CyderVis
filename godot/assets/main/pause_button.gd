@@ -1,10 +1,11 @@
 extends Button
 class_name PauseButton
 
-@onready var _can_bridge: GodotCanBridge = get_tree().current_scene.get_node("GodotCanBridge")
-@onready var _interface_box: LineEdit = get_parent().get_node("CanInterfaceBox")
-@onready var _tab_container: TabContainer = get_tree().current_scene.get_node("Background/TabContainer")
-@onready var _receive_table: ReceiveTable = get_tree().current_scene.get_node("Background/Table")
+@export_category("Node References")
+@export var _can_bridge: GodotCanBridge
+@export var _interface_box: LineEdit
+@export var _tab_container: TabContainer
+@export var _receive_table: ReceiveTable
 
 var _is_paused: bool
 

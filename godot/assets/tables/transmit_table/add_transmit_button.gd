@@ -1,13 +1,12 @@
 extends Button
 class_name SendButton
 
-var transmit_table: TransmitTable
+
+@export_category("Node References")
+@export var transmit_table: TransmitTable
 
 
 func _ready() -> void:
-	# Resolve scene connections
-	transmit_table = get_tree().current_scene.get_node("Background/TabContainer/Transmit/Table")
-
 	self.pressed.connect(_button_pressed)
 
 

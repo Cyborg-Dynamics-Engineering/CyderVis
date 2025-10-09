@@ -2,6 +2,9 @@ extends Control
 class_name TransmitTable
 
 
+@export_category("Node References")
+@export var godot_can_bridge: GodotCanBridge
+
 @onready var table_row = preload("res://assets/tables/table_row.tscn")
 @onready var table_cell = preload("res://assets/tables/table_cell.tscn")
 @onready var table_button = preload("res://assets/tables/table_button.tscn")
@@ -9,9 +12,7 @@ class_name TransmitTable
 @onready var table_send_check_box = preload("res://assets/tables/transmit_table/send_checkbox_cell.tscn")
 @onready var table_send_delete_button = preload("res://assets/tables/transmit_table/send_delete_cell.tscn")
 @onready var send_entries: Array = []
-
-var rows: Control
-var godot_can_bridge: GodotCanBridge
+@onready var rows: Control = get_node("Rows")
 
 const DELETE_IDX = 0
 const TOGGLE_IDX = 1
@@ -24,8 +25,6 @@ const CELL_WIDTHS = [60, 60, 120, 120, 250]
 
 
 func _ready() -> void:
-	rows = get_node("Rows")
-	godot_can_bridge = get_tree().current_scene.get_node("GodotCanBridge")
 	_generate_header_row()
 
 

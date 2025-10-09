@@ -2,17 +2,19 @@ extends Control
 class_name ReceiveTable
 
 
+@export_category("Node References")
+@export var godot_can_bridge: GodotCanBridge
+@export var pause_button: PauseButton
+@export var can_graph: CanGraph
+@export var can_id_format_button: CanFormatButton
+@export var can_data_format_button: CanFormatButton
+@export var time_format_button: CanFormatButton
+
 @onready var table_row = preload("res://assets/tables/table_row.tscn")
 @onready var table_cell = preload("res://assets/tables/table_cell.tscn")
 @onready var table_button = preload("res://assets/tables/table_button.tscn")
-@onready var rows: Control = get_node("Rows")
 @onready var right_click_context_menu: PopupMenu = get_node("PopupMenu")
-@onready var godot_can_bridge: GodotCanBridge = get_tree().current_scene.get_node("GodotCanBridge")
-@onready var pause_button: PauseButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/PauseButton")
-@onready var can_graph: CanGraph = get_tree().current_scene.get_node("Background/TabContainer/Plot/Graph2D")
-@onready var can_id_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/CanIdFormatButton")
-@onready var can_data_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/CanDataFormatButton")
-@onready var time_format_button: CanFormatButton = get_tree().current_scene.get_node("Background/TabContainer/Interface/TimeFormatButton")
+@onready var rows: Control = get_node("Rows")
 @onready var existing_can_entries: Dictionary[int, ReceiveTableEntry] = {}
 @onready var starting_timestamp: int = -1
 
