@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
 
+[ext_resource type="Script" uid="uid://caee7k6af2fip" path="res://assets/main/set_min_window_size.gd" id="1_by4fb"]
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
 [ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
 [ext_resource type="Script" uid="uid://f1bhbi0m4dr1" path="res://assets/main/pause_button.gd" id="3_xwkvk"]
@@ -11,9 +12,11 @@
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_by4fb")
 metadata/_edit_horizontal_guides_ = [400.0, 450.0]
 
 [node name="Background" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 360)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -25,6 +28,7 @@ mouse_filter = 2
 theme = ExtResource("2_3wy1v")
 
 [node name="VSplitContainer" type="VSplitContainer" parent="Background"]
+custom_minimum_size = Vector2(0, 360)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,6 +41,7 @@ drag_area_offset = 32
 drag_area_highlight_in_editor = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Background/VSplitContainer"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -53,6 +58,7 @@ can_data_format_button = NodePath("../../TabContainer/Interface/CanDataFormatBut
 time_format_button = NodePath("../../TabContainer/Interface/TimeFormatButton")
 
 [node name="TabContainer" type="TabContainer" parent="Background/VSplitContainer"]
+custom_minimum_size = Vector2(0, 260)
 layout_mode = 2
 current_tab = 0
 
@@ -65,8 +71,8 @@ layout_mode = 1
 anchors_preset = -1
 offset_left = 302.0
 offset_top = 20.0
-offset_right = 455.6
-offset_bottom = 43.0
+offset_right = 382.0
+offset_bottom = 51.0
 grow_horizontal = 2
 focus_mode = 0
 text = "Start"
@@ -103,7 +109,7 @@ vertical_alignment = 1
 layout_mode = 1
 offset_left = 150.0
 offset_top = 67.0
-offset_right = 600.0
+offset_right = 550.0
 offset_bottom = 98.0
 placeholder_text = "No DBC file"
 editable = false
@@ -121,10 +127,10 @@ text = "DBC File:	"
 
 [node name="DbcFileButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_receive_table", "_dbc_file_box", "_pause_button")]
 layout_mode = 1
-offset_left = 614.0
-offset_top = 70.0
-offset_right = 714.0
-offset_bottom = 93.0
+offset_left = 570.0
+offset_top = 67.0
+offset_right = 650.0
+offset_bottom = 98.0
 focus_mode = 0
 text = "Open"
 script = ExtResource("5_by4fb")
@@ -144,9 +150,9 @@ text = "CAN ID Format:"
 [node name="CanIdFormatButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("receive_table", "transmit_table")]
 layout_mode = 1
 offset_left = 165.0
-offset_top = 110.0
+offset_top = 108.0
 offset_right = 292.0
-offset_bottom = 133.0
+offset_bottom = 139.0
 focus_mode = 0
 text = "Hexadecimal"
 script = ExtResource("5_irre0")
@@ -166,9 +172,9 @@ text = "CAN Data Format:"
 [node name="CanDataFormatButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("receive_table", "transmit_table")]
 layout_mode = 1
 offset_left = 165.0
-offset_top = 145.0
+offset_top = 143.0
 offset_right = 292.0
-offset_bottom = 168.0
+offset_bottom = 174.0
 focus_mode = 0
 text = "Hexadecimal"
 script = ExtResource("5_irre0")
@@ -188,9 +194,9 @@ text = "Time Format:"
 [node name="TimeFormatButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("receive_table", "transmit_table")]
 layout_mode = 1
 offset_left = 165.0
-offset_top = 180.0
+offset_top = 178.0
 offset_right = 292.0
-offset_bottom = 203.0
+offset_bottom = 209.0
 focus_mode = 0
 text = "Frequency"
 script = ExtResource("5_irre0")
