@@ -198,37 +198,31 @@ layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="Panel" type="Panel" parent="Background/VSplitContainer/TabContainer/Plot"]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 38.0
-offset_right = 170.0
-offset_bottom = 402.0
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 172.0
+offset_bottom = -23.0
 
 [node name="LegendLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Plot/Panel"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = 33.0
 offset_top = 8.0
-offset_right = -30.0
-offset_bottom = -322.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 122.0
+offset_bottom = 42.0
 theme_override_font_sizes/font_size = 24
 text = "Legend"
 
 [node name="Graph2D" type="Control" parent="Background/VSplitContainer/TabContainer/Plot"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -444.0
-offset_top = -205.0
-offset_right = 627.0
-offset_bottom = 206.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 198.0
+offset_top = 16.0
+offset_right = -25.0
+offset_bottom = -17.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_kfbq2")
@@ -256,16 +250,13 @@ godot_can_bridge = NodePath("../../../../../GodotCanBridge")
 
 [node name="TransmitAddButton" type="Button" parent="Background/VSplitContainer/TabContainer/Transmit" node_paths=PackedStringArray("transmit_table")]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1256.0
+offset_left = 20.0
 offset_top = -67.0
-offset_right = -1135.0
+offset_right = 141.0
 offset_bottom = -17.0
-grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
 text = "Add New"
