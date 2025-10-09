@@ -4,8 +4,9 @@ class_name CanFormatButton
 @export var on_label: String
 @export var off_label: String
 
-@onready var receive_table: ReceiveTable = get_tree().current_scene.get_node("Background/Table")
-@onready var transmit_table: TransmitTable = get_tree().current_scene.get_node("Background/TabContainer/Transmit/Table")
+@export_category("Node References")
+@export var receive_table: ReceiveTable
+@export var transmit_table: TransmitTable
 
 var _can_format_on: bool
 
