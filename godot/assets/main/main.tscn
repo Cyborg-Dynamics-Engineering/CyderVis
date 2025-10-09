@@ -32,18 +32,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 split_offset = 350
-dragger_visibility = 1
-touch_dragger_enabled = true
-drag_area_offset = 40
+dragger_visibility = 2
+drag_area_offset = 32
+drag_area_highlight_in_editor = true
 
-[node name="ReceiveTable" parent="Background/VSplitContainer" node_paths=PackedStringArray("godot_can_bridge", "pause_button", "can_graph", "can_id_format_button", "can_data_format_button", "time_format_button") instance=ExtResource("1_ig7tw")]
+[node name="MarginContainer" type="MarginContainer" parent="Background/VSplitContainer"]
 layout_mode = 2
-godot_can_bridge = NodePath("../../../GodotCanBridge")
-pause_button = NodePath("../TabContainer/Interface/PauseButton")
-can_graph = NodePath("../TabContainer/Plot/Graph2D")
-can_id_format_button = NodePath("../TabContainer/Interface/CanIdFormatButton")
-can_data_format_button = NodePath("../TabContainer/Interface/CanDataFormatButton")
-time_format_button = NodePath("../TabContainer/Interface/TimeFormatButton")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ReceiveTable" parent="Background/VSplitContainer/MarginContainer" node_paths=PackedStringArray("godot_can_bridge", "pause_button", "can_graph", "can_id_format_button", "can_data_format_button", "time_format_button") instance=ExtResource("1_ig7tw")]
+layout_mode = 2
+godot_can_bridge = NodePath("../../../../GodotCanBridge")
+pause_button = NodePath("../../TabContainer/Interface/PauseButton")
+can_graph = NodePath("../../TabContainer/Plot/Graph2D")
+can_id_format_button = NodePath("../../TabContainer/Interface/CanIdFormatButton")
+can_data_format_button = NodePath("../../TabContainer/Interface/CanDataFormatButton")
+time_format_button = NodePath("../../TabContainer/Interface/TimeFormatButton")
 
 [node name="TabContainer" type="TabContainer" parent="Background/VSplitContainer"]
 layout_mode = 2
@@ -67,7 +74,7 @@ script = ExtResource("3_xwkvk")
 _can_bridge = NodePath("../../../../../GodotCanBridge")
 _interface_box = NodePath("../CanInterfaceBox")
 _tab_container = NodePath("../..")
-_receive_table = NodePath("../../../ReceiveTable")
+_receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 
 [node name="CanInterfaceBox" type="LineEdit" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
@@ -122,7 +129,7 @@ focus_mode = 0
 text = "Open"
 script = ExtResource("5_by4fb")
 _can_bridge = NodePath("../../../../../GodotCanBridge")
-_receive_table = NodePath("../../../ReceiveTable")
+_receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 _dbc_file_box = NodePath("../DbcFileBox")
 _pause_button = NodePath("../PauseButton")
 
@@ -145,7 +152,7 @@ text = "Hexadecimal"
 script = ExtResource("5_irre0")
 on_label = "Hexadecimal"
 off_label = "Decimal"
-receive_table = NodePath("../../../ReceiveTable")
+receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 transmit_table = NodePath("../../Transmit/TransmitTable")
 
 [node name="CanDataFormatLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
@@ -167,7 +174,7 @@ text = "Hexadecimal"
 script = ExtResource("5_irre0")
 on_label = "Hexadecimal"
 off_label = "Decimal"
-receive_table = NodePath("../../../ReceiveTable")
+receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 transmit_table = NodePath("../../Transmit/TransmitTable")
 
 [node name="TimeFormatLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
@@ -189,7 +196,7 @@ text = "Frequency"
 script = ExtResource("5_irre0")
 on_label = "Frequency"
 off_label = "Period"
-receive_table = NodePath("../../../ReceiveTable")
+receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 transmit_table = NodePath("../../Transmit/TransmitTable")
 
 [node name="Plot" type="Control" parent="Background/VSplitContainer/TabContainer"]
