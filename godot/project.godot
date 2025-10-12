@@ -21,7 +21,6 @@ config/icon="uid://cxm8emaglono1"
 
 window/size/viewport_width=1280
 window/size/viewport_height=800
-window/subwindows/embed_subwindows=false
 
 [editor_plugins]
 
