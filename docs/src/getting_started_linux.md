@@ -127,7 +127,4 @@ To load a `.dbc` file:
 - **CyderVis doesn’t connect:**  
   Ensure the `canserver` is running and the interface name matches (e.g., `can0`).
 
-- **Permission issues:**  
-  Try running both `canserver` and CyderVis as **Administrator**.
-
 ---
