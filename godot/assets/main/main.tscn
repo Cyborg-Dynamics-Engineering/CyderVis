@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
 
+[ext_resource type="Script" uid="uid://caee7k6af2fip" path="res://assets/main/set_min_window_size.gd" id="1_by4fb"]
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
 [ext_resource type="Theme" uid="uid://b6yn6fpahycts" path="res://assets/main/main_theme.tres" id="2_3wy1v"]
 [ext_resource type="Script" uid="uid://f1bhbi0m4dr1" path="res://assets/main/pause_button.gd" id="3_xwkvk"]
@@ -11,9 +12,11 @@
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_by4fb")
 metadata/_edit_horizontal_guides_ = [400.0, 450.0]
 
 [node name="Background" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 360)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -24,227 +27,216 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme = ExtResource("2_3wy1v")
 
-[node name="Table" parent="Background" instance=ExtResource("1_ig7tw")]
+[node name="VSplitContainer" type="VSplitContainer" parent="Background"]
+custom_minimum_size = Vector2(0, 360)
 layout_mode = 1
-anchors_preset = 10
-anchor_bottom = 0.0
-offset_left = 50.0
-offset_top = 25.0
-offset_right = -50.0
-offset_bottom = 302.0
-grow_vertical = 1
-
-[node name="TabContainer" type="TabContainer" parent="Background"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -467.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+split_offset = 350
+dragger_visibility = 2
+drag_area_offset = 32
+drag_area_highlight_in_editor = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/VSplitContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ReceiveTable" parent="Background/VSplitContainer/MarginContainer" node_paths=PackedStringArray("godot_can_bridge", "pause_button", "can_graph", "can_id_format_button", "can_data_format_button", "time_format_button") instance=ExtResource("1_ig7tw")]
+layout_mode = 2
+godot_can_bridge = NodePath("../../../../GodotCanBridge")
+pause_button = NodePath("../../TabContainer/Interface/PauseButton")
+can_graph = NodePath("../../TabContainer/Plot/Graph2D")
+can_id_format_button = NodePath("../../TabContainer/Interface/CanIdFormatButton")
+can_data_format_button = NodePath("../../TabContainer/Interface/CanDataFormatButton")
+time_format_button = NodePath("../../TabContainer/Interface/TimeFormatButton")
+
+[node name="TabContainer" type="TabContainer" parent="Background/VSplitContainer"]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
 current_tab = 0
 
-[node name="Interface" type="Control" parent="Background/TabContainer"]
+[node name="Interface" type="Control" parent="Background/VSplitContainer/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="PauseButton" type="Button" parent="Background/TabContainer/Interface"]
+[node name="PauseButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_interface_box", "_tab_container", "_receive_table")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 311.0
-offset_top = 16.0
-offset_right = -865.0
-offset_bottom = -380.0
+anchors_preset = -1
+offset_left = 302.0
+offset_top = 20.0
+offset_right = 382.0
+offset_bottom = 51.0
 grow_horizontal = 2
-grow_vertical = 2
 focus_mode = 0
 text = "Start"
 script = ExtResource("3_xwkvk")
+_can_bridge = NodePath("../../../../../GodotCanBridge")
+_interface_box = NodePath("../CanInterfaceBox")
+_tab_container = NodePath("../..")
+_receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 
-[node name="CanInterfaceBox" type="LineEdit" parent="Background/TabContainer/Interface"]
+[node name="CanInterfaceBox" type="LineEdit" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 167.0
-offset_top = 16.0
-offset_right = -983.0
-offset_bottom = -380.0
+anchors_preset = -1
+offset_left = 150.0
+offset_top = 20.0
+offset_right = 276.0
+offset_bottom = 51.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "can0"
 
-[node name="CanInterfaceLabel" type="Label" parent="Background/TabContainer/Interface"]
+[node name="CanInterfaceLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = 22.0
-offset_right = -1149.0
-offset_bottom = -386.0
+anchors_preset = -1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 132.0
+offset_bottom = 43.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "CAN Interface:"
 vertical_alignment = 1
 
-[node name="DbcFileBox" type="LineEdit" parent="Background/TabContainer/Interface"]
+[node name="DbcFileBox" type="LineEdit" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 167.0
-offset_top = 66.0
-offset_right = -638.0
-offset_bottom = -330.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 150.0
+offset_top = 67.0
+offset_right = 550.0
+offset_bottom = 98.0
 placeholder_text = "No DBC file"
 editable = false
 
-[node name="DbcFileLabel" type="Label" parent="Background/TabContainer/Interface"]
+[node name="DbcFileLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = 72.0
-offset_right = -1190.0
-offset_bottom = -336.0
+anchors_preset = -1
+offset_left = 63.0
+offset_top = 70.0
+offset_right = 134.0
+offset_bottom = 93.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "DBC File:	"
 
-[node name="DbcFileButton" type="Button" parent="Background/TabContainer/Interface"]
+[node name="DbcFileButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_receive_table", "_dbc_file_box", "_pause_button")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 654.0
-offset_top = 66.0
-offset_right = -522.0
-offset_bottom = -330.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 570.0
+offset_top = 67.0
+offset_right = 650.0
+offset_bottom = 98.0
 focus_mode = 0
 text = "Open"
 script = ExtResource("5_by4fb")
+_can_bridge = NodePath("../../../../../GodotCanBridge")
+_receive_table = NodePath("../../../MarginContainer/ReceiveTable")
+_dbc_file_box = NodePath("../DbcFileBox")
+_pause_button = NodePath("../PauseButton")
 
-[node name="CanIdFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
+[node name="CanIdFormatLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 122.0
-offset_right = 134.0
-offset_bottom = 146.0
+offset_left = 32.0
+offset_top = 110.0
+offset_right = 151.0
+offset_bottom = 134.0
 text = "CAN ID Format:"
 
-[node name="CanIdFormatButton" type="Button" parent="Background/TabContainer/Interface"]
+[node name="CanIdFormatButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("receive_table", "transmit_table")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 167.0
-offset_top = 116.0
-offset_right = -982.0
-offset_bottom = -279.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 165.0
+offset_top = 108.0
+offset_right = 292.0
+offset_bottom = 139.0
 focus_mode = 0
 text = "Hexadecimal"
 script = ExtResource("5_irre0")
 on_label = "Hexadecimal"
 off_label = "Decimal"
+receive_table = NodePath("../../../MarginContainer/ReceiveTable")
+transmit_table = NodePath("../../Transmit/TransmitTable")
 
-[node name="CanDataFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
+[node name="CanDataFormatLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 172.0
-offset_right = 154.0
-offset_bottom = 196.0
+offset_left = 13.0
+offset_top = 145.0
+offset_right = 152.0
+offset_bottom = 169.0
 text = "CAN Data Format:"
 
-[node name="CanDataFormatButton" type="Button" parent="Background/TabContainer/Interface"]
+[node name="CanDataFormatButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("receive_table", "transmit_table")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 167.0
-offset_top = 165.0
-offset_right = -982.0
-offset_bottom = -229.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 165.0
+offset_top = 143.0
+offset_right = 292.0
+offset_bottom = 174.0
 focus_mode = 0
 text = "Hexadecimal"
 script = ExtResource("5_irre0")
 on_label = "Hexadecimal"
 off_label = "Decimal"
+receive_table = NodePath("../../../MarginContainer/ReceiveTable")
+transmit_table = NodePath("../../Transmit/TransmitTable")
 
-[node name="TimeFormatLabel" type="Label" parent="Background/TabContainer/Interface"]
+[node name="TimeFormatLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 0
-offset_left = 17.0
-offset_top = 222.0
-offset_right = 128.0
-offset_bottom = 246.0
+offset_left = 50.0
+offset_top = 180.0
+offset_right = 161.00002
+offset_bottom = 204.0
 text = "Time Format:"
 
-[node name="TimeFormatButton" type="Button" parent="Background/TabContainer/Interface"]
+[node name="TimeFormatButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("receive_table", "transmit_table")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 167.0
-offset_top = 214.0
-offset_right = -982.0
-offset_bottom = -180.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 165.0
+offset_top = 178.0
+offset_right = 292.0
+offset_bottom = 209.0
 focus_mode = 0
 text = "Frequency"
 script = ExtResource("5_irre0")
 on_label = "Frequency"
 off_label = "Period"
+receive_table = NodePath("../../../MarginContainer/ReceiveTable")
+transmit_table = NodePath("../../Transmit/TransmitTable")
 
-[node name="Plot" type="Control" parent="Background/TabContainer"]
+[node name="Plot" type="Control" parent="Background/VSplitContainer/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Panel" type="Panel" parent="Background/TabContainer/Plot"]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 38.0
-offset_right = 170.0
-offset_bottom = 402.0
+[node name="Panel" type="Panel" parent="Background/VSplitContainer/TabContainer/Plot"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 172.0
+offset_bottom = -23.0
 
-[node name="LegendLabel" type="Label" parent="Background/TabContainer/Plot/Panel"]
+[node name="LegendLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Plot/Panel"]
+layout_mode = 1
+offset_left = 33.0
+offset_top = 8.0
+offset_right = 122.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 24
+text = "Legend"
+
+[node name="Graph2D" type="Control" parent="Background/VSplitContainer/TabContainer/Plot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 33.0
-offset_top = 8.0
-offset_right = -30.0
-offset_bottom = -322.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 24
-text = "Legend"
-
-[node name="Graph2D" type="Control" parent="Background/TabContainer/Plot"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -444.0
-offset_top = -205.0
-offset_right = 627.0
-offset_bottom = 206.0
+offset_left = 198.0
+offset_top = 16.0
+offset_right = -25.0
+offset_bottom = -17.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_kfbq2")
@@ -257,34 +249,33 @@ legend_y_pos = 50
 legend_max_width = 140
 metadata/_custom_type_script = "uid://bs2ndl3vun60f"
 
-[node name="Transmit" type="Control" parent="Background/TabContainer"]
+[node name="Transmit" type="Control" parent="Background/VSplitContainer/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Table" parent="Background/TabContainer/Transmit" instance=ExtResource("6_67ri8")]
+[node name="TransmitTable" parent="Background/VSplitContainer/TabContainer/Transmit" node_paths=PackedStringArray("godot_can_bridge") instance=ExtResource("6_67ri8")]
 layout_mode = 1
 offset_left = 10.0
 offset_top = 10.0
 offset_right = -18.0
 offset_bottom = -78.0
+godot_can_bridge = NodePath("../../../../../GodotCanBridge")
 
-[node name="TransmitAddButton" type="Button" parent="Background/TabContainer/Transmit"]
+[node name="TransmitAddButton" type="Button" parent="Background/VSplitContainer/TabContainer/Transmit" node_paths=PackedStringArray("transmit_table")]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1256.0
+offset_left = 20.0
 offset_top = -67.0
-offset_right = -1135.0
+offset_right = 141.0
 offset_bottom = -17.0
-grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
 text = "Add New"
 script = ExtResource("9_by4fb")
+transmit_table = NodePath("../TransmitTable")
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 
