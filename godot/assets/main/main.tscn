@@ -50,6 +50,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="ReceiveTable" parent="Background/VSplitContainer/MarginContainer" node_paths=PackedStringArray("godot_can_bridge", "pause_button", "can_graph", "can_id_format_button", "can_data_format_button", "time_format_button") instance=ExtResource("1_ig7tw")]
 layout_mode = 2
+mouse_filter = 1
 godot_can_bridge = NodePath("../../../../GodotCanBridge")
 pause_button = NodePath("../../TabContainer/Interface/PauseButton")
 can_graph = NodePath("../../TabContainer/Plot/Graph2D")
