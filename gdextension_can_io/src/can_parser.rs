@@ -188,9 +188,6 @@ impl CanParser {
         mut godot_can_entry: Array<Variant>,
         frame: CanFrame,
     ) -> Array<Variant> {
-        if frame.data().len() == 0 {
-            godot_can_entry.push(&GString::from("").to_variant())
-        }
         for byte in frame.data() {
             godot_can_entry.push(&GString::from(format!("{:?}", byte)).to_variant())
         }
