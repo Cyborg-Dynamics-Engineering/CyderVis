@@ -1,6 +1,6 @@
 # Getting Started on Linux
 
-This guide walks you through setting up and running **CyderVis** on Windows.
+This guide walks you through setting up and running **CyderVis** on Linux.
 
 ---
 
@@ -17,7 +17,7 @@ sudo apt install can-utils
 ## Step 2: Download and Run CyderVis
 
 1. Visit the [CyderVis Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page on GitHub.  
-2. Under the latest release, expand the **Assets** dropdown and download the Windows `.zip` package.
+2. Under the latest release, expand the **Assets** dropdown and download the Linux `.zip` package.
 
    ![Releases](images/releases_linux.png)
 
