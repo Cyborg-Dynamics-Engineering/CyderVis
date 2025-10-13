@@ -164,8 +164,7 @@ class TransmitTableEntry:
 		var can_id_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
 		can_id_cell.custom_minimum_size = Vector2(CELL_WIDTHS[CAN_ID_IDX], CELL_HEIGHT)
 		_can_id_box = can_id_cell.get_node("LineEdit")
-		_can_id_box.placeholder_text = "0"
-		_transmit_table._update_label_and_font_size(_can_id_box, "", CELL_WIDTHS[CAN_ID_IDX])
+		_transmit_table._update_label_and_font_size(_can_id_box, "0", CELL_WIDTHS[CAN_ID_IDX])
 		_row.add_child(can_id_cell)
 
 		# Only allow valid hex characters for CAN ID box
