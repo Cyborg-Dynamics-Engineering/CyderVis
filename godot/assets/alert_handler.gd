@@ -23,5 +23,6 @@ static func display_error(msg: String) -> void:
 
 	singleton().get_tree().current_scene.add_child(alert_box)
 
-	alert_box.popup()
+	alert_box.show()
+	alert_box.exclusive = false
 	alert_box.position = Vector2i((_handler_instance.get_viewport().size.x - alert_box.size.x) / 2, (_handler_instance.get_viewport().size.y - alert_box.size.y) - 50)
