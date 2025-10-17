@@ -38,6 +38,12 @@ You can verify the interface is active using:
 ip link show can0
 ```
 
+By default, CAN devices have a tx queue length of 10. If sending many messages at a fast rate, it's usually a good idea to increase this. After bringing the interface up, the tx queue length can be increased using:
+
+```bash
+sudo ip link set can0 txqueuelen 1000
+```
+
 > ⚙️ **Note:**  
 > Replace `can0` and `1000000` with your actual interface name and bitrate if different.
 
