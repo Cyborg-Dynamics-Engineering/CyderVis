@@ -9,6 +9,7 @@ A GUI application for realtime viewing, deserialising, and plotting CAN data. Su
 ## Documentation
 
 For installation and usage instructions, read the docs!
+
 **Link:** https://cyborg-dynamics-engineering.github.io/cyder-vis/
 
 ## License
