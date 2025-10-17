@@ -1,6 +1,6 @@
 # CyderVis - A CAN Visualization tool for Windows & Linux
 
-A GUI application for realtime viewing, deserialising, and plotting CAN data. Supports deserialisation of CAN messages through runtime-loaded CAN DBC files.
+Cyder-Vis is an open-source visualizer and debugger for CAN bus networks. It helps engineers and developers receive, decode, transmit, and plot CAN messages for debugging and diagnostics.
 
 <p align="center">
     <img src="godot/screenshot.png" width="50%">
