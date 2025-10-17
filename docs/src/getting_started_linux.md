@@ -2,19 +2,7 @@
 
 This guide walks you through setting up and running **CyderVis** on Linux.
 
----
-
-## Step 1: Install *can-utils*
-
-**can-utils** is a powerful CAN toolkit for Linux, providing a range of command-line tools. It also provides the backend CyderVis uses for interfacing with the CAN adapter.
-
-```bash
-sudo apt install can-utils
-```
-
----
-
-## Step 2: Download and Run CyderVis
+## Step 1: Download and Run CyderVis
 
 1. Visit the [CyderVis Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page on GitHub.  
 2. Under the latest release, expand the **Assets** dropdown and download the Linux `.zip` package.
@@ -34,7 +22,7 @@ Once launched, the **CyderVis** window will open:
 
 ---
 
-## Step 3: Bring up a CAN interface
+## Step 2: Bring up a CAN interface
 
 With your USB CAN adapter connected, bring up the CAN interface using the `ip` command:
 
@@ -55,7 +43,7 @@ ip link show can0
 
 ---
 
-## Step 4: Connect and Receive Data in CyderVis
+## Step 3: Connect and Receive Data in CyderVis
 
 1. In **CyderVis**, locate the **CAN Interface** input field.  
 2. Verify that the interface name matches the one brought up in the previous step (default is `can0`).  
@@ -67,7 +55,7 @@ If other devices are active on the bus, incoming CAN frames will begin streaming
 
 ---
 
-## Step 5: Adjust Display Options
+## Step 4: Adjust Display Options
 
 Use the display option toggles to customize how CAN data is displayed.  
 These toggles control message formatting and visualization preferences.
@@ -76,7 +64,7 @@ These toggles control message formatting and visualization preferences.
 
 ---
 
-## Step 6: Load a `.dbc` File to Decode Frames
+## Step 5: Load a `.dbc` File to Decode Frames
 
 A **DBC file** defines how to decode CAN frames into human-readable signals.  
 You can learn more about the DBC format here:  
@@ -94,7 +82,7 @@ To load a `.dbc` file:
 
 ---
 
-## Step 7: Plotting Decoded Data
+## Step 6: Plotting Decoded Data
 
 1. Open the **Plot** tab.  
 2. Click on any decoded variable name in the viewing table to toggle it on or off in the plot view.
@@ -106,7 +94,7 @@ To load a `.dbc` file:
 
 ---
 
-## Step 8: Transmitting Frames
+## Step 7: Transmitting Frames
 
 1. Open the **Transmit** tab.
 2. Press 'Add New' to create a new message.
