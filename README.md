@@ -6,34 +6,10 @@ A GUI application for realtime viewing, deserialising, and plotting CAN data. Su
     <img src="godot/screenshot.png" width="50%">
 </p>
 
-## Installation
+## Documentation
 
-Go to the [Releases](https://github.com/Cyborg-Dynamics-Engineering/cyder-vis/releases) page and download the latest program from the **Assets** dropdown.
-
-## Usage
-
-### Windows
-
-Windows users must install [win-can-utils](https://github.com/Cyborg-Dynamics-Engineering/win-can-utils).
-
-After installing win-can-utils, start a can server by running
-
-```bash
-canserver <COM Port> -b <CAN Bitrate>
-```
-Run CyderVis and type in the name of the CAN interface (ie. COM12) into the CAN Interface input box and click 'Start'.
-If the CAN adapter has been configured correctly, and is receiving data, it will appear in the table at the top of the window.
-
-### Linux
-
-Linux users must install can-utils & bring up a can interface.
-
-```bash
-sudo apt install can-utils
-sudo ip link set can0 up type can bitrate 1000000
-```
-Run CyderVis and type in the name of the CAN interface (ie. can0) into the CAN Interface input box and click 'Start'.
-If the CAN adapter has been configured correctly, and is receiving data, it will appear in the table at the top of the window.
+For installation and usage instructions, read the docs!
+**Link:** https://cyborg-dynamics-engineering.github.io/cyder-vis/
 
 ## License
 
