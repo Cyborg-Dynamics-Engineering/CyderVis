@@ -20,9 +20,9 @@ static func display_error(msg: String) -> void:
 	if handler_ref == null:
 		return
 	
-	# Delete any existing alert boxes if present
+	# Only create new alert box if no old alerts are present
 	if is_instance_valid(handler_ref.prev_alert_box):
-		handler_ref.prev_alert_box.queue_free()
+		return
 
 	var alert_box: AcceptDialog = AcceptDialog.new()
 	alert_box.title = ""
@@ -33,5 +33,9 @@ static func display_error(msg: String) -> void:
 	alert_box.show()
 	alert_box.exclusive = false
 	alert_box.position = Vector2i((_handler_instance.get_viewport().size.x - alert_box.size.x) / 2, (_handler_instance.get_viewport().size.y - alert_box.size.y) - 50)
+
+	# Have the alert box delete itself when closed
+	alert_box.confirmed.connect(alert_box.queue_free)
+	alert_box.close_requested.connect(alert_box.queue_free)
 
 	handler_ref.prev_alert_box = alert_box
