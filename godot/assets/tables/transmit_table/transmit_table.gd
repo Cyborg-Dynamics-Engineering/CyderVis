@@ -126,11 +126,19 @@ class TransmitTableEntry:
 				_transmit_table.send_entries.erase(self)
 		)
 
-		# Add check box
-		var check_box_cell: PanelContainer = _transmit_table.table_send_check_box.instantiate()
-		check_box_cell.custom_minimum_size = Vector2(CELL_WIDTHS[TOGGLE_IDX], CELL_HEIGHT)
-		_row.add_child(check_box_cell)
-		_check_box = check_box_cell.get_node("CheckBox") # Link check box to the send entry to allow the entry to check whether it should be sending
+		# Add send check box
+		var send_box_cell: PanelContainer = _transmit_table.table_send_check_box.instantiate()
+		send_box_cell.custom_minimum_size = Vector2(CELL_WIDTHS[TOGGLE_IDX], CELL_HEIGHT)
+		_row.add_child(send_box_cell)
+		_check_box = send_box_cell.get_node("CheckBox") # Link check box to the send entry to allow the entry to check whether it should be sending
+		_check_box.toggled.connect(
+			# Ensure that message fields cannot be edited while sending.
+			func(toggled_on: bool):
+				_cycle_time_box.editable = not toggled_on
+				_can_id_box.editable = not toggled_on
+				_data_box.editable = not toggled_on
+				_extended_id_check_box.disabled = toggled_on
+		)
 
 		# Add cycle time box
 		var cycle_time_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
