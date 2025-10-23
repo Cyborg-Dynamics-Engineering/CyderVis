@@ -67,7 +67,7 @@ current_tab = 0
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="PauseButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_interface_box", "_tab_container", "_receive_table")]
+[node name="PauseButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_interface_box", "_tab_container", "_receive_table", "_dbc_line_edit", "_dbc_open_button")]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 302.0
@@ -82,6 +82,8 @@ _can_bridge = NodePath("../../../../../GodotCanBridge")
 _interface_box = NodePath("../CanInterfaceBox")
 _tab_container = NodePath("../..")
 _receive_table = NodePath("../../../MarginContainer/ReceiveTable")
+_dbc_line_edit = NodePath("../DbcFileBox")
+_dbc_open_button = NodePath("../DbcFileButton")
 
 [node name="CanInterfaceBox" type="LineEdit" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
@@ -113,7 +115,6 @@ offset_top = 67.0
 offset_right = 550.0
 offset_bottom = 98.0
 placeholder_text = "No DBC file"
-editable = false
 
 [node name="DbcFileLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
