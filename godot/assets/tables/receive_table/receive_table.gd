@@ -73,7 +73,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					clear_row(selected_can_id)
 		, CONNECT_ONE_SHOT)
 
-		right_click_context_menu.popup(Rect2(last_mouse_pos.x, last_mouse_pos.y, right_click_context_menu.size.x, right_click_context_menu.size.y))
+		right_click_context_menu.popup(Rect2(last_mouse_pos.x, last_mouse_pos.y, 0.0, 0.0))
 
 
 # Updates the rows in the table with incoming data
