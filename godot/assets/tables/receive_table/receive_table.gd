@@ -59,7 +59,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		# Add 'clear all' item
 		right_click_context_menu.add_item("Clear all")
 
-		# Attach the 'Clear' functions to the clearing items
+		# Disconnect all previous connections to popup 'index_pressed'
+		for conn in right_click_context_menu.index_pressed.get_connections():
+			right_click_context_menu.index_pressed.disconnect(conn.callable)
+
+		# Attach the 'clear' functions to popup 'index_pressed'
 		right_click_context_menu.index_pressed.connect(
 			func(menu_item_index):
 				var clear_all_selected: bool = (menu_item_index == right_click_context_menu.item_count - 1)
@@ -112,6 +116,10 @@ func clear_all() -> void:
 
 # Clears a specific row from the table
 func clear_row(can_id: int) -> void:
+	if not existing_can_entries.has(can_id):
+		printerr("Attempted to clear a CAN ID that doesn't exist in the receive table: " + str(can_id))
+		return
+
 	# Clear rows and entries from Godot side
 	existing_can_entries[can_id].get_row().queue_free()
 	existing_can_entries.erase(can_id)
