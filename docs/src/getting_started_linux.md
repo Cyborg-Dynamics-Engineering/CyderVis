@@ -99,16 +99,12 @@ To load a `.dbc` file:
 1. Open the **Transmit** tab.
 2. Press 'Add New' to create a new message.
 3. Fill out the Cycle Time, Frame ID and Data fields.
-4. Click the 'Send' checkbox to begin transmitting.
+4. For extended IDs, select the EXT ID checkbox.
+5. Click the 'Send' checkbox to begin transmitting.
 
 > 💡 **Notes:**  
 > 1. A **Cycle Time** of `0` designates a *one-shot* message — it sends once each time you click the **Send** checkbox.  
-> 2. Frame ID values above `0x7FF` are always treated as *extended IDs*.  
->    To designate IDs below `0x7FF`, add leading zeros:  
->    - `0x7FF` → standard ID  
->    - `0x07FF` → extended ID  
->    - `0x000` → standard ID  
->    - `0x0000` → extended ID
+> 2. Messages cannot be edited whilst sending.
 
 ## Troubleshooting
 
