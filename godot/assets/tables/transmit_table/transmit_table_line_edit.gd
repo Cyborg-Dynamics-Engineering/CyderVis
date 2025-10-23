@@ -34,5 +34,12 @@ func _ready() -> void:
 				next_row.get_child(_send_text_cell.get_index()).get_node("LineEdit").grab_focus()
 	)
 
-	# Select all text when entering focus
-	focus_entered.connect(select_all)
+	# Select all text when entering editing mode
+	editing_toggled.connect(
+		func(toggled_on: bool):
+			if toggled_on:
+				select_all()
+	)
+
+	# Deselect all text when losing focus
+	focus_exited.connect(deselect)
