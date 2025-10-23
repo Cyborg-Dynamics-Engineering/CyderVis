@@ -27,7 +27,6 @@ metadata/_tab_index = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_hxyd2")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2ldu8")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_osccm")

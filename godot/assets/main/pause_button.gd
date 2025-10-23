@@ -13,6 +13,9 @@ var _is_paused: bool
 
 
 func _ready() -> void:
+	# Have the CAN interface box be the default focus on startup
+	_interface_box.grab_focus()
+
 	self.pressed.connect(_button_pressed)
 	_is_paused = true
 	_update_text()
