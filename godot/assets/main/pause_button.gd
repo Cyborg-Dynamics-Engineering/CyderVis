@@ -79,3 +79,7 @@ func _update_tab_selectability() -> void:
 func _update_dbc_editability() -> void:
 	_dbc_line_edit.editable = _is_paused
 	_dbc_open_button.disabled = not _is_paused
+
+	var tooltip_string: String = "" if _is_paused else "Cannot modify DBC file during an active connection"
+	_dbc_line_edit.tooltip_text = tooltip_string
+	_dbc_open_button.tooltip_text = tooltip_string

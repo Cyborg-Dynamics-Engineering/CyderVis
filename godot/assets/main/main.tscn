@@ -127,7 +127,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "DBC File:	"
 
-[node name="DbcFileButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_receive_table", "_dbc_file_box", "_pause_button")]
+[node name="DbcFileButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_dbc_file_box")]
 layout_mode = 1
 offset_left = 570.0
 offset_top = 67.0
@@ -137,9 +137,7 @@ focus_mode = 0
 text = "Open"
 script = ExtResource("5_by4fb")
 _can_bridge = NodePath("../../../../../GodotCanBridge")
-_receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 _dbc_file_box = NodePath("../DbcFileBox")
-_pause_button = NodePath("../PauseButton")
 
 [node name="CanIdFormatLabel" type="Label" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 0
