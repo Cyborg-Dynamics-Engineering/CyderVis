@@ -10,6 +10,5 @@ metadata/_tab_index = 2
 
 [node name="SendButton" type="Button" parent="."]
 layout_mode = 2
-focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_wf3ce")
 text = "X"

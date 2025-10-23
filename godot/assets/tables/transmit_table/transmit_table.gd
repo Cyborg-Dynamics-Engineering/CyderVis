@@ -122,6 +122,10 @@ class TransmitTableEntry:
 		var delete_button: Button = delete_cell.get_node("SendButton")
 		delete_button.pressed.connect(
 			func():
+				# Move focus to another item before deleting
+				_transmit_table.find_prev_valid_focus().grab_focus()
+
+				# Delete this entire row
 				_row.queue_free()
 				_transmit_table.send_entries.erase(self)
 		)

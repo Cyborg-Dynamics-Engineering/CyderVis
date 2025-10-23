@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwn3h37m8jcr5"]
+[gd_scene load_steps=4 format=3 uid="uid://cwn3h37m8jcr5"]
+
+[ext_resource type="Script" uid="uid://bko8il8kdnpo4" path="res://assets/tables/transmit_table/transmit_table_line_edit.gd" id="1_ht66h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uri0s"]
 bg_color = Color(0.215686, 0.215686, 0.215686, 1)
@@ -19,3 +21,4 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hxyd2")
 text = "Cell"
 alignment = 1
 flat = true
+script = ExtResource("1_ht66h")
