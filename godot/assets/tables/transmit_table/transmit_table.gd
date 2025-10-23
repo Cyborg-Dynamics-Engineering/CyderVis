@@ -126,17 +126,32 @@ class TransmitTableEntry:
 				_transmit_table.send_entries.erase(self)
 		)
 
-		# Add check box
-		var check_box_cell: PanelContainer = _transmit_table.table_send_check_box.instantiate()
-		check_box_cell.custom_minimum_size = Vector2(CELL_WIDTHS[TOGGLE_IDX], CELL_HEIGHT)
-		_row.add_child(check_box_cell)
-		_check_box = check_box_cell.get_node("CheckBox") # Link check box to the send entry to allow the entry to check whether it should be sending
+		# Add send check box
+		var send_box_cell: PanelContainer = _transmit_table.table_send_check_box.instantiate()
+		send_box_cell.custom_minimum_size = Vector2(CELL_WIDTHS[TOGGLE_IDX], CELL_HEIGHT)
+		_row.add_child(send_box_cell)
+		_check_box = send_box_cell.get_node("CheckBox") # Link check box to the send entry to allow the entry to check whether it should be sending
+		_check_box.toggled.connect(
+			# Ensure that message fields cannot be edited while sending.
+			func(toggled_on: bool):
+				_cycle_time_box.editable = not toggled_on
+				_can_id_box.editable = not toggled_on
+				_data_box.editable = not toggled_on
+				_extended_id_check_box.disabled = toggled_on
+
+				# Update tooltips for each element
+				var tooltip_string: String = "Cannot modify message while sending" if toggled_on else ""
+				_cycle_time_box.tooltip_text = tooltip_string
+				_can_id_box.tooltip_text = tooltip_string
+				_data_box.tooltip_text = tooltip_string
+				_extended_id_check_box.tooltip_text = tooltip_string
+		)
 
 		# Add cycle time box
 		var cycle_time_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
 		cycle_time_cell.custom_minimum_size = Vector2(CELL_WIDTHS[CYCLE_TIME_IDX], CELL_HEIGHT)
 		_cycle_time_box = cycle_time_cell.get_node("LineEdit")
-		_transmit_table._update_label_and_font_size(_cycle_time_box, "0", CELL_WIDTHS[CYCLE_TIME_IDX])
+		_cycle_time_box.text = "0"
 		_row.add_child(cycle_time_cell)
 
 		# Only allow numeric characters for cycle time box
@@ -164,7 +179,7 @@ class TransmitTableEntry:
 		var can_id_cell: PanelContainer = _transmit_table.table_send_text_cell.instantiate()
 		can_id_cell.custom_minimum_size = Vector2(CELL_WIDTHS[CAN_ID_IDX], CELL_HEIGHT)
 		_can_id_box = can_id_cell.get_node("LineEdit")
-		_transmit_table._update_label_and_font_size(_can_id_box, "0", CELL_WIDTHS[CAN_ID_IDX])
+		_can_id_box.text = "0"
 		_row.add_child(can_id_cell)
 
 		# Only allow valid hex characters for CAN ID box
@@ -187,7 +202,7 @@ class TransmitTableEntry:
 		data_cell.custom_minimum_size = Vector2(CELL_WIDTHS[DATA_IDX], CELL_HEIGHT)
 		data_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_data_box = data_cell.get_node("LineEdit")
-		_transmit_table._update_label_and_font_size(_data_box, "", CELL_WIDTHS[DATA_IDX])
+		_data_box.text = ""
 		_row.add_child(data_cell)
 
 		# Add byte seperation formatting and character validation for Data box

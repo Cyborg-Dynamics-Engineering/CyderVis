@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bl5u4a3hv50ll"]
+[gd_scene load_steps=5 format=3 uid="uid://bl5u4a3hv50ll"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uri0s"]
+bg_color = Color(0.215686, 0.215686, 0.215686, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxyd2"]
 bg_color = Color(0.215686, 0.215686, 0.215686, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ldu8"]
@@ -11,8 +14,8 @@ corner_radius_bottom_left = 5
 expand_margin_left = 3.0
 expand_margin_right = 3.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxyd2"]
-bg_color = Color(0.215686, 0.215686, 0.215686, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_osccm"]
+bg_color = Color(0.21568628, 0.21568628, 0.21568628, 1)
 
 [node name="SendCheckBoxCell" type="PanelContainer"]
 offset_right = 24.0
@@ -25,5 +28,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_mode = 0
-theme_override_styles/pressed = SubResource("StyleBoxFlat_2ldu8")
 theme_override_styles/normal = SubResource("StyleBoxFlat_hxyd2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2ldu8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_osccm")
+alignment = 1
+icon_alignment = 1

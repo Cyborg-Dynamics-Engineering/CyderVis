@@ -8,9 +8,17 @@ Cyder-Vis is an open-source visualizer and debugger for CAN bus networks. It hel
 
 ## Documentation
 
+###  User Guide
+
 For installation and usage instructions, read the docs!
 
 **Link:** https://cyborg-dynamics-engineering.github.io/cyder-vis/
+
+### Video Tutorial
+
+A video tutorial is available for how to use v0.0.4 of the software.
+
+**Link:** https://youtu.be/ltGhDHuehn8?si=pxIEBTlz7TYvtH6-
 
 ## License
 

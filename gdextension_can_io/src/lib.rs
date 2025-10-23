@@ -224,7 +224,14 @@ async fn read_can(
         {
             let mut frames_to_send = sending_queue.lock().await;
             for frame in frames_to_send.clone().into_iter() {
-                socket.write_frame(frame).await.unwrap();
+                if let Err(e) = socket.write_frame(frame).await {
+                    error_alert_godot(format!(
+                        "Error when transmitting frames (Some messages may have not been sent): {:?}",
+                        e.to_string()
+                    ));
+                    godot_error!("{e:?}");
+                    break;
+                }
             }
             frames_to_send.clear();
         }

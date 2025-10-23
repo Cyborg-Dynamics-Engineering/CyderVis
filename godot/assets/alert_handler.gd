@@ -3,9 +3,12 @@ class_name AlertHandler
 
 static var _handler_instance: AlertHandler
 
+var prev_alert_box: AcceptDialog
+
 
 func _ready() -> void:
 	_handler_instance = self
+	prev_alert_box = null
 
 
 static func singleton() -> AlertHandler:
@@ -16,6 +19,10 @@ static func display_error(msg: String) -> void:
 	var handler_ref := singleton()
 	if handler_ref == null:
 		return
+	
+	# Only create new alert box if no old alerts are present
+	if is_instance_valid(handler_ref.prev_alert_box):
+		return
 
 	var alert_box: AcceptDialog = AcceptDialog.new()
 	alert_box.title = ""
@@ -23,5 +30,12 @@ static func display_error(msg: String) -> void:
 
 	singleton().get_tree().current_scene.add_child(alert_box)
 
-	alert_box.popup()
+	alert_box.show()
+	alert_box.exclusive = false
 	alert_box.position = Vector2i((_handler_instance.get_viewport().size.x - alert_box.size.x) / 2, (_handler_instance.get_viewport().size.y - alert_box.size.y) - 50)
+
+	# Have the alert box delete itself when closed
+	alert_box.confirmed.connect(alert_box.queue_free)
+	alert_box.close_requested.connect(alert_box.queue_free)
+
+	handler_ref.prev_alert_box = alert_box
