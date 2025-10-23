@@ -24,5 +24,3 @@ If you’re building **CAN-based systems** and need easy-to-integrate, industry-
 [🔗 Visit the Cyder Store](https://www.cyborgdynamicseng.com/cyder-store)
 
 [<img src="images/cyder_store.png" alt="Cyder Store" width="700">](https://www.cyborgdynamicseng.com/cyder-store)
-
----

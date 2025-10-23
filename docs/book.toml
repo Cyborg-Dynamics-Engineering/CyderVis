@@ -3,6 +3,7 @@ authors = ["Ryan Marple"]
 language = "en"
 src = "src"
 title = "CyderVis Documentation"
+description = "CyderVis – open-source real-time CAN-bus visualization and debugging tool for automotive, robotics and industrial systems. Receive, decode, plot and transmit CAN/CAN-FD messages on Windows & Linux."
 
 [build]
 build-dir = "book"
