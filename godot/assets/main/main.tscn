@@ -274,7 +274,9 @@ script = ExtResource("9_by4fb")
 transmit_table = NodePath("../TransmitTable")
 
 [node name="ContextMenu" parent="Background" instance=ExtResource("10_irre0")]
+visible = false
 layout_mode = 0
+offset_right = 140.0
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 
