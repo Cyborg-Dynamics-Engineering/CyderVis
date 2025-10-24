@@ -9,11 +9,11 @@ class_name ReceiveTable
 @export var can_id_format_button: CanFormatButton
 @export var can_data_format_button: CanFormatButton
 @export var time_format_button: CanFormatButton
+@export var context_menu: ContextMenu
 
 @onready var table_row = preload("res://assets/tables/table_row.tscn")
 @onready var table_cell = preload("res://assets/tables/table_cell.tscn")
 @onready var table_button = preload("res://assets/tables/table_button.tscn")
-@onready var right_click_context_menu: PopupMenu = get_node("PopupMenu")
 @onready var rows: Control = get_node("Rows")
 @onready var existing_can_entries: Dictionary[int, ReceiveTableEntry] = {}
 @onready var starting_timestamp: int = -1
@@ -42,38 +42,21 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	# Produce a 'clearing' context menu whenever right clicks fall on the receive table
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
-		var last_mouse_pos = get_global_mouse_position()
-
-		# Reconfigure context menu options
-		right_click_context_menu.clear()
+		# Clear all old context menu options
+		context_menu.clear_items()
 
 		# Check if the mouse is over any specific row entries and if so add the 'clear msg' item
-		var selected_can_id: int
+		var last_mouse_pos = get_global_mouse_position()
 		for entry: ReceiveTableEntry in existing_can_entries.values():
 			var control_rect: Rect2 = entry.get_row().get_global_rect()
 			if control_rect.has_point(last_mouse_pos):
-				right_click_context_menu.add_item("Clear: " + entry.formatted_can_id())
-				selected_can_id = entry.id()
+				context_menu.add_item("Clear: " + entry.formatted_can_id(), clear_row.bind(entry.id()))
 				continue
 		
 		# Add 'clear all' item
-		right_click_context_menu.add_item("Clear all")
+		context_menu.add_item("Clear all", clear_all)
 
-		# Disconnect all previous connections to popup 'index_pressed'
-		for conn in right_click_context_menu.index_pressed.get_connections():
-			right_click_context_menu.index_pressed.disconnect(conn.callable)
-
-		# Attach the 'clear' functions to popup 'index_pressed'
-		right_click_context_menu.index_pressed.connect(
-			func(menu_item_index):
-				var clear_all_selected: bool = (menu_item_index == right_click_context_menu.item_count - 1)
-				if clear_all_selected:
-					clear_all()
-				else:
-					clear_row(selected_can_id)
-		, CONNECT_ONE_SHOT)
-
-		right_click_context_menu.popup(Rect2(last_mouse_pos.x, last_mouse_pos.y, 0.0, 0.0))
+		context_menu.appear(last_mouse_pos)
 
 
 # Updates the rows in the table with incoming data
