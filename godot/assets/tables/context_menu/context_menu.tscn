@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://iyen1raq2l20"]
+
+[ext_resource type="Script" uid="uid://3av0j27w2hre" path="res://assets/tables/context_menu/context_menu.gd" id="1_qjnwu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qjnwu"]
+bg_color = Color(0.14767182, 0.14767179, 0.14767179, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="ContextMenu" type="PanelContainer" node_paths=PackedStringArray("button_container")]
+custom_minimum_size = Vector2(140, 0)
+offset_right = 10.0
+offset_bottom = 10.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qjnwu")
+script = ExtResource("1_qjnwu")
+button_container = NodePath("MarginContainer/VBoxContainer")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2

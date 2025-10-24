@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=12 format=3 uid="uid://dno8ya28n0fu0"]
 
 [ext_resource type="Script" uid="uid://caee7k6af2fip" path="res://assets/main/set_min_window_size.gd" id="1_by4fb"]
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cxmpvhrkegrfn" path="res://assets/plotting/can_graph.gd" id="5_kfbq2"]
 [ext_resource type="PackedScene" uid="uid://dj2at18bricod" path="res://assets/tables/transmit_table/transmit_table.tscn" id="6_67ri8"]
 [ext_resource type="Script" uid="uid://ctju5kkovohfu" path="res://assets/tables/transmit_table/add_transmit_button.gd" id="9_by4fb"]
+[ext_resource type="PackedScene" uid="uid://iyen1raq2l20" path="res://assets/tables/context_menu/context_menu.tscn" id="10_irre0"]
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
 
 [node name="Main" type="Node"]
@@ -48,7 +49,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="ReceiveTable" parent="Background/VSplitContainer/MarginContainer" node_paths=PackedStringArray("godot_can_bridge", "pause_button", "can_graph", "can_id_format_button", "can_data_format_button", "time_format_button") instance=ExtResource("1_ig7tw")]
+[node name="ReceiveTable" parent="Background/VSplitContainer/MarginContainer" node_paths=PackedStringArray("godot_can_bridge", "pause_button", "can_graph", "can_id_format_button", "can_data_format_button", "time_format_button", "context_menu") instance=ExtResource("1_ig7tw")]
 layout_mode = 2
 mouse_filter = 1
 godot_can_bridge = NodePath("../../../../GodotCanBridge")
@@ -57,6 +58,7 @@ can_graph = NodePath("../../TabContainer/Plot/Graph2D")
 can_id_format_button = NodePath("../../TabContainer/Interface/CanIdFormatButton")
 can_data_format_button = NodePath("../../TabContainer/Interface/CanDataFormatButton")
 time_format_button = NodePath("../../TabContainer/Interface/TimeFormatButton")
+context_menu = NodePath("../../../ContextMenu")
 
 [node name="TabContainer" type="TabContainer" parent="Background/VSplitContainer"]
 custom_minimum_size = Vector2(0, 260)
@@ -270,6 +272,9 @@ grow_vertical = 0
 text = "Add New"
 script = ExtResource("9_by4fb")
 transmit_table = NodePath("../TransmitTable")
+
+[node name="ContextMenu" parent="Background" instance=ExtResource("10_irre0")]
+layout_mode = 0
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 
