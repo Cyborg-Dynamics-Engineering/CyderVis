@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dno8ya28n0fu0"]
+[gd_scene load_steps=13 format=3 uid="uid://dno8ya28n0fu0"]
 
 [ext_resource type="Script" uid="uid://caee7k6af2fip" path="res://assets/main/set_min_window_size.gd" id="1_by4fb"]
 [ext_resource type="PackedScene" uid="uid://df463g67o2em3" path="res://assets/tables/receive_table/receive_table.tscn" id="1_ig7tw"]
@@ -11,13 +11,14 @@
 [ext_resource type="Script" uid="uid://ctju5kkovohfu" path="res://assets/tables/transmit_table/add_transmit_button.gd" id="9_by4fb"]
 [ext_resource type="PackedScene" uid="uid://iyen1raq2l20" path="res://assets/tables/context_menu/context_menu.tscn" id="10_irre0"]
 [ext_resource type="Script" uid="uid://dnrrwnrmvjxvr" path="res://assets/alert_handler.gd" id="11_bsumw"]
+[ext_resource type="Script" uid="uid://cay8qy6p443lm" path="res://assets/status_bar.gd" id="11_in5wb"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_by4fb")
 metadata/_edit_horizontal_guides_ = [400.0, 450.0]
 
 [node name="Background" type="Panel" parent="."]
-custom_minimum_size = Vector2(0, 360)
+custom_minimum_size = Vector2(0, 400)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,6 +35,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
 split_offset = 350
@@ -277,6 +279,30 @@ transmit_table = NodePath("../TransmitTable")
 visible = false
 layout_mode = 0
 offset_right = 140.0
+
+[node name="StatusBar" type="PanelContainer" parent="Background" node_paths=PackedStringArray("godot_can_bridge", "connection_label")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("11_in5wb")
+godot_can_bridge = NodePath("../../GodotCanBridge")
+connection_label = NodePath("MarginContainer/ConnectionLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/StatusBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ConnectionLabel" type="Label" parent="Background/StatusBar/MarginContainer"]
+layout_mode = 2
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]
 

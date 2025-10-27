@@ -25,6 +25,7 @@ unsafe impl ExtensionLibrary for CanGDExtension {}
 struct GodotCanBridge {
     can_parser: can_parser::CanParser,
     read_handle: Option<tokio::task::JoinHandle<()>>,
+    interface: String,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
@@ -52,6 +53,7 @@ impl INode for GodotCanBridge {
         Self {
             can_parser: CanParser::new(),
             read_handle: None,
+            interface: "".to_string(),
             can_entries: Arc::new(Mutex::new(HashMap::<CanId, CanEntry>::new())),
             sending_queue: Arc::new(Mutex::new(VecDeque::<CanFrame>::new())),
             closure_requested: Arc::new(Mutex::new(false)),
@@ -111,6 +113,8 @@ impl GodotCanBridge {
             };
             error_alert_godot(format!("Error when attempting to thread: {:?}", msg));
         }
+
+        self.interface = interface_name.clone();
 
         // Create the CAN read/write thread
         let _guard = self.runtime.enter();
@@ -190,6 +194,14 @@ impl GodotCanBridge {
             return !handle.is_finished();
         }
         false
+    }
+
+    #[func]
+    fn get_interface(&mut self) -> String {
+        if self.is_alive() {
+            return self.interface.clone();
+        }
+        "".to_string()
     }
 }
 
