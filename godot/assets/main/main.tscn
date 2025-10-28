@@ -280,7 +280,7 @@ visible = false
 layout_mode = 0
 offset_right = 140.0
 
-[node name="StatusBar" type="PanelContainer" parent="Background" node_paths=PackedStringArray("godot_can_bridge", "connection_label")]
+[node name="StatusBar" type="PanelContainer" parent="Background" node_paths=PackedStringArray("godot_can_bridge", "connection_label", "bitrate_label")]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 1
 anchors_preset = 12
@@ -292,16 +292,30 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("11_in5wb")
 godot_can_bridge = NodePath("../../GodotCanBridge")
-connection_label = NodePath("MarginContainer/ConnectionLabel")
+connection_label = NodePath("MarginContainer/HBoxContainer/ConnectionLabel")
+bitrate_label = NodePath("MarginContainer/HBoxContainer/BitrateLabel")
 
 [node name="MarginContainer" type="MarginContainer" parent="Background/StatusBar"]
 layout_mode = 2
-theme_override_constants/margin_left = 5
+theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
+theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 5
 
-[node name="ConnectionLabel" type="Label" parent="Background/StatusBar/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/StatusBar/MarginContainer"]
+layout_mode = 2
+
+[node name="ConnectionLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="DividerLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+text = "|"
+
+[node name="BitrateLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]

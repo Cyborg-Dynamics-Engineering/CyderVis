@@ -26,6 +26,7 @@ struct GodotCanBridge {
     can_parser: can_parser::CanParser,
     read_handle: Option<tokio::task::JoinHandle<()>>,
     interface: String,
+    bitrate: Arc<Mutex<u32>>,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
@@ -54,6 +55,7 @@ impl INode for GodotCanBridge {
             can_parser: CanParser::new(),
             read_handle: None,
             interface: "".to_string(),
+            bitrate: Arc::new(Mutex::new(0)),
             can_entries: Arc::new(Mutex::new(HashMap::<CanId, CanEntry>::new())),
             sending_queue: Arc::new(Mutex::new(VecDeque::<CanFrame>::new())),
             closure_requested: Arc::new(Mutex::new(false)),
@@ -118,6 +120,7 @@ impl GodotCanBridge {
 
         // Create the CAN read/write thread
         let _guard = self.runtime.enter();
+        let bitrate = Arc::clone(&self.bitrate);
         let can_entries = Arc::clone(&self.can_entries);
         let sending_queue = Arc::clone(&self.sending_queue);
         let closure_requested = Arc::clone(&self.closure_requested);
@@ -125,6 +128,7 @@ impl GodotCanBridge {
         self.read_handle = Some(tokio::spawn(async {
             read_can(
                 interface_name,
+                bitrate,
                 can_entries,
                 sending_queue,
                 closure_requested,
@@ -203,10 +207,19 @@ impl GodotCanBridge {
         }
         "".to_string()
     }
+
+    #[func]
+    fn get_bitrate(&mut self) -> u32 {
+        if self.is_alive() {
+            return *self.runtime.block_on(self.bitrate.lock());
+        }
+        0
+    }
 }
 
 async fn read_can(
     interface_name: String,
+    bitrate: Arc<Mutex<u32>>,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
@@ -228,6 +241,16 @@ async fn read_can(
             ));
             godot_error!("{err:?}");
             return;
+        }
+    };
+
+    // Save the bitrate
+    *bitrate.lock().await = match socket.get_bitrate() {
+        Ok(br) => br.unwrap_or(0),
+        Err(err) => {
+            error_alert_godot(format!("Failed to read bitrate on {interface_name:?}"));
+            godot_error!("{err:?}");
+            0
         }
     };
 
