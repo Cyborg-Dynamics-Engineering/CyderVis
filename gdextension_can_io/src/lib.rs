@@ -233,7 +233,7 @@ async fn read_can(
     use crosscan::win_can::WindowsCan as CanSocket;
 
     // Open async CAN socket
-    let mut socket = match CanSocket::open(&interface_name) {
+    let mut socket = match CanSocket::open(&interface_name).await {
         Ok(sock) => sock,
         Err(err) => {
             error_alert_godot(format!(
@@ -245,7 +245,7 @@ async fn read_can(
     };
 
     // Save the bitrate
-    *bitrate.lock().await = match socket.get_bitrate() {
+    *bitrate.lock().await = match socket.get_bitrate().await {
         Ok(br) => br.unwrap_or(0),
         Err(err) => {
             error_alert_godot(format!("Failed to read bitrate on {interface_name:?}"));
