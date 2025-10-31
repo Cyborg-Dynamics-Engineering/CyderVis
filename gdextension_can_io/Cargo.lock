@@ -120,12 +120,13 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
 name = "crosscan"
-version = "0.1.1"
-source = "git+https://github.com/Cyborg-Dynamics-Engineering/cross-can?rev=850a96d#850a96d64358d5684c2421adbb722d9735f3cd0e"
+version = "0.2.0"
+source = "git+https://github.com/Cyborg-Dynamics-Engineering/cross-can?rev=e593d85#e593d853a87de671ff6af160709b5fd315068592"
 dependencies = [
  "async-trait",
  "bincode",
  "serde",
+ "serde_json",
  "socketcan",
  "tokio",
 ]

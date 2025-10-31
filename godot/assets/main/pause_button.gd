@@ -8,6 +8,7 @@ class_name PauseButton
 @export var _receive_table: ReceiveTable
 @export var _dbc_line_edit: LineEdit
 @export var _dbc_open_button: Button
+@export var _status_bar: StatusBar
 
 var _is_paused: bool
 
@@ -53,6 +54,7 @@ func _button_pressed() -> void:
 		_can_bridge.close_bus()
 
 	_toggle_pause()
+	_status_bar.update_text()
 
 
 # Toggle the paused state and update the button text
