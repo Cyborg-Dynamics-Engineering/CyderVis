@@ -94,7 +94,7 @@ grow_vertical = 2
 text = "CAN Interface:"
 vertical_alignment = 1
 
-[node name="PauseButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_interface_box", "_tab_container", "_receive_table", "_dbc_line_edit", "_dbc_open_button")]
+[node name="PauseButton" type="Button" parent="Background/VSplitContainer/TabContainer/Interface" node_paths=PackedStringArray("_can_bridge", "_interface_box", "_tab_container", "_receive_table", "_dbc_line_edit", "_dbc_open_button", "_status_bar")]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 302.0
@@ -110,6 +110,7 @@ _tab_container = NodePath("../..")
 _receive_table = NodePath("../../../MarginContainer/ReceiveTable")
 _dbc_line_edit = NodePath("../DbcFileBox")
 _dbc_open_button = NodePath("../DbcFileButton")
+_status_bar = NodePath("../../../../StatusBar")
 
 [node name="DbcFileBox" type="LineEdit" parent="Background/VSplitContainer/TabContainer/Interface"]
 layout_mode = 1
@@ -280,7 +281,7 @@ visible = false
 layout_mode = 0
 offset_right = 140.0
 
-[node name="StatusBar" type="PanelContainer" parent="Background" node_paths=PackedStringArray("godot_can_bridge", "connection_label", "bitrate_label")]
+[node name="StatusBar" type="PanelContainer" parent="Background" node_paths=PackedStringArray("godot_can_bridge", "connection_label", "bitrate_label", "bus_loading_label")]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 1
 anchors_preset = 12
@@ -294,6 +295,7 @@ script = ExtResource("11_in5wb")
 godot_can_bridge = NodePath("../../GodotCanBridge")
 connection_label = NodePath("MarginContainer/HBoxContainer/ConnectionLabel")
 bitrate_label = NodePath("MarginContainer/HBoxContainer/BitrateLabel")
+bus_loading_label = NodePath("MarginContainer/HBoxContainer/LoadingLabel")
 
 [node name="MarginContainer" type="MarginContainer" parent="Background/StatusBar"]
 layout_mode = 2
@@ -306,7 +308,7 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 
 [node name="ConnectionLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="DividerLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
@@ -315,7 +317,16 @@ layout_mode = 2
 text = "|"
 
 [node name="BitrateLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="DividerLabel2" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+text = "|"
+
+[node name="LoadingLabel" type="Label" parent="Background/StatusBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="GodotCanBridge" type="GodotCanBridge" parent="."]

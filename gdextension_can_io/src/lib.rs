@@ -23,10 +23,11 @@ unsafe impl ExtensionLibrary for CanGDExtension {}
 #[derive(GodotClass)]
 #[class(base=Node)]
 struct GodotCanBridge {
-    can_parser: can_parser::CanParser,
+    can_parser: CanParser,
     read_handle: Option<tokio::task::JoinHandle<()>>,
     interface: String,
     bitrate: Arc<Mutex<u32>>,
+    bit_counter: Arc<Mutex<usize>>,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
@@ -56,6 +57,7 @@ impl INode for GodotCanBridge {
             read_handle: None,
             interface: "".to_string(),
             bitrate: Arc::new(Mutex::new(0)),
+            bit_counter: Arc::new(Mutex::new(0)),
             can_entries: Arc::new(Mutex::new(HashMap::<CanId, CanEntry>::new())),
             sending_queue: Arc::new(Mutex::new(VecDeque::<CanFrame>::new())),
             closure_requested: Arc::new(Mutex::new(false)),
@@ -121,6 +123,7 @@ impl GodotCanBridge {
         // Create the CAN read/write thread
         let _guard = self.runtime.enter();
         let bitrate = Arc::clone(&self.bitrate);
+        let bit_counter = Arc::clone(&self.bit_counter);
         let can_entries = Arc::clone(&self.can_entries);
         let sending_queue = Arc::clone(&self.sending_queue);
         let closure_requested = Arc::clone(&self.closure_requested);
@@ -129,6 +132,7 @@ impl GodotCanBridge {
             read_can(
                 interface_name,
                 bitrate,
+                bit_counter,
                 can_entries,
                 sending_queue,
                 closure_requested,
@@ -215,11 +219,26 @@ impl GodotCanBridge {
         }
         0
     }
+
+    /// Returns the number of bits sent/received over the bus since the last time this function was called
+    #[func]
+    fn get_bus_bits(&mut self) -> u64 {
+        if self.is_alive() {
+            let mut bit_counter_mutex = self.runtime.block_on(self.bit_counter.lock());
+            let count = (*bit_counter_mutex).try_into().unwrap();
+
+            // Reset the counter before returning the old count value
+            *bit_counter_mutex = 0;
+            return count;
+        }
+        0
+    }
 }
 
 async fn read_can(
     interface_name: String,
     bitrate: Arc<Mutex<u32>>,
+    bit_counter: Arc<Mutex<usize>>,
     can_entries: Arc<Mutex<HashMap<CanId, CanEntry>>>,
     sending_queue: Arc<Mutex<VecDeque<CanFrame>>>,
     closure_requested: Arc<Mutex<bool>>,
@@ -259,6 +278,8 @@ async fn read_can(
         {
             let mut frames_to_send = sending_queue.lock().await;
             for frame in frames_to_send.clone().into_iter() {
+                *bit_counter.lock().await += can_frame_bits(&frame);
+
                 if let Err(e) = socket.write_frame(frame).await {
                     error_alert_godot(format!(
                         "Error when transmitting frames (Some messages may have not been sent): {:?}",
@@ -292,6 +313,8 @@ async fn read_can(
         // Process the incoming CanFrame
         match res {
             Ok(frame) => {
+                *bit_counter.lock().await += can_frame_bits(&frame);
+
                 let current_timestamp_us = { start_time.lock().await.elapsed().as_micros() };
 
                 let mut can_entries = can_entries.lock().await;
@@ -365,4 +388,13 @@ fn error_alert_godot(msg: String) {
     script.call_deferred("display_error", args);
 
     godot_error!("{:?}", msg);
+}
+
+// Returns the size in bytes of a given CanFrame when it is on the CAN bus
+fn can_frame_bits(frame: &CanFrame) -> usize {
+    let base = if frame.is_extended() { 67 } else { 47 }; // All non-data fields
+    let data_bits = frame.dlc() * 8;
+    let est_stuff = ((base + data_bits) as f32 * 0.2) as usize; // Estimate 20% bit stuffing on average
+
+    base + data_bits + est_stuff
 }
