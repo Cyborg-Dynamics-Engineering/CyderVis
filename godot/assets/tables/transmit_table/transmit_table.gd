@@ -4,6 +4,7 @@ class_name TransmitTable
 
 @export_category("Node References")
 @export var godot_can_bridge: GodotCanBridge
+@export var pause_button: PauseButton
 
 @onready var table_row = preload("res://assets/tables/table_row.tscn")
 @onready var table_cell = preload("res://assets/tables/table_cell.tscn")
@@ -30,8 +31,11 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if pause_button.is_paused():
+		return
+
 	for send_entry: TransmitTableEntry in send_entries:
-		if send_entry.enabled():
+		if send_entry.sending():
 			send_entry.send_if_ready()
 
 
@@ -252,7 +256,7 @@ class TransmitTableEntry:
 
 
 	# Returns true if this entry should be currently transmitting
-	func enabled() -> bool:
+	func sending() -> bool:
 		return _check_box.button_pressed
 
 
