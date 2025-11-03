@@ -38,7 +38,7 @@ if __name__ == "__main__":
         "id": "20102",
         "extended_id": True,
         "signals" :{
-            "id": {"type": "u32", "unit": ""},
+            "id": {"type": "u8", "unit": ""},
         }
     },
     {

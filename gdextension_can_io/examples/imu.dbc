@@ -42,8 +42,8 @@ BO_ 2147549954 WriteToFlash: 0 Vector__XXX
 
 BO_ 2147550210 ClearStatus: 0 Vector__XXX
 
-BO_ 2147614978 SetDeviceId: 4 Vector__XXX
-    SG_ id : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+BO_ 2147614978 SetDeviceId: 1 Vector__XXX
+    SG_ id : 0|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 2147615234 SetCanBitrate: 1 Vector__XXX
     SG_ can_bitrate : 0|8@1+ (1,0) [0|0] "" Vector__XXX
