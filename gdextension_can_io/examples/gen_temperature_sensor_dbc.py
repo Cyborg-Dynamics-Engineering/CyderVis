@@ -54,6 +54,13 @@ messages = [
         }
     },
     {
+        "name": "GetProductInfo",
+        "id": "30110",
+        "extended_id": True,
+        "signals" :{
+        }
+    },
+    {
         "name": "GetConfig",
         "id": "30210",
         "extended_id": True,
@@ -66,6 +73,17 @@ messages = [
         "extended_id": True,
         "signals" :{
             "ident": {"type": "u32", "unit": ""},
+        }
+    },
+    {
+        "name": "ProductInfo",
+        "id": "40210",
+        "extended_id": True,
+        "signals" :{
+            "part_no": {"type": "u32", "unit": ""},
+            "patch": {"type": "u16", "unit": ""},
+            "minor": {"type": "u8", "unit": ""},
+            "major": {"type": "u8", "unit": ""},
         }
     },
     {

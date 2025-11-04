@@ -51,10 +51,18 @@ BO_ 2147615248 SetCanBitrate: 1 Vector__XXX
 BO_ 2147615504 SetStatusRate: 1 Vector__XXX
     SG_ status_rate : 0|8@1+ (1,0) [0|0] "" Vector__XXX
 
+BO_ 2147680528 GetProductInfo: 0 Vector__XXX
+
 BO_ 2147680784 GetConfig: 0 Vector__XXX
 
 BO_ 2147746064 Ack: 4 Vector__XXX
     SG_ ident : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147746320 ProductInfo: 8 Vector__XXX
+    SG_ part_no : 0|32@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ patch : 32|16@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ minor : 48|8@1+ (1,0) [0|0] "" Vector__XXX
+    SG_ major : 56|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 2147746576 StatusRate: 1 Vector__XXX
     SG_ status_rate : 0|8@1+ (1,0) [0|0] "" Vector__XXX
@@ -92,6 +100,7 @@ BO_ 2148401168 Temperatures: 8 Vector__XXX
     SG_ sensor_3 : 32|16@1- (1,0) [0|0] "" Vector__XXX
     SG_ sensor_4 : 48|16@1- (1,0) [0|0] "" Vector__XXX
 
+BA_DEF_DEF_ "BusType" "CAN";
 
 SIG_VALTYPE_ 2148139536 a : 1;
 SIG_VALTYPE_ 2148139792 b : 1;
