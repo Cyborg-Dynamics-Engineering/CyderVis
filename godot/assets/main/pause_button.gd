@@ -54,13 +54,13 @@ func _button_pressed() -> void:
 		_can_bridge.close_bus()
 
 	_toggle_pause()
-	_status_bar.update_text()
 
 
 # Toggle the paused state and update the button text
 func _toggle_pause() -> void:
 	_is_paused = not _is_paused
 	_update_text()
+	_status_bar.update_text()
 	_update_tab_selectability()
 	_update_dbc_editability()
 
